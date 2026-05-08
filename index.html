@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABK Open Mic | Setlist Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background-color: #070b12; color: #e5e7eb; }
+        .tab-scroll::-webkit-scrollbar { display: none; }
+        .tab-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .tab-btn { transition: all 0.15s ease; white-space: nowrap; }
+        .tab-btn.active { background-color: #22c55e; color: #052e16; }
+        .tab-btn:not(.active) { color: #9ca3af; background: #111827; border: 1px solid #1f2937; }
+        .tab-btn:not(.active):hover { background-color: #1f2937; color: #e5e7eb; }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .song-card { transition: box-shadow 0.15s, transform 0.15s; }
+        .song-card:hover { box-shadow: 0 0 0 2px #15803d33; transform: translateY(-1px); }
+        .song-detail { display: none; }
+        .song-card.open .song-detail { display: block; }
+        .role-pill { background: #111827; color: #9ca3af; border: 1px solid #263244; }
+        .role-pill.filled { background: #052e16; color: #86efac; border-color: #166534; }
+        .role-pill.open-role { background: #431407; color: #fdba74; border-color: #9a3412; }
+        .bar { height: 7px; border-radius: 999px; background: #22c55e; }
+        .link-btn { transition: all 0.15s ease; }
+        .link-btn:hover { background: #1f2937; }
+        .video-frame { aspect-ratio: 16 / 9; background: #020617; border: 1px solid #263244; }
+        .dark-card { background: #0f172a; border-color: #1f2937; box-shadow: 0 18px 60px #00000033; }
+        .dark-soft { background: #111827; border-color: #263244; }
+        .count-box { background: #020617; border: 1px solid #1f2937; }
+        .playlist-frame { aspect-ratio: 16 / 9; background: #020617; border: 1px solid #263244; }
+        .venue-image { aspect-ratio: 16 / 9; object-fit: cover; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <nav class="bg-[#020617] text-white px-6 py-3 flex items-center gap-3 text-sm border-b border-[#1f2937]">
+        <span class="font-black tracking-tight text-white text-base">ABK Open Mic</span>
+        <span class="text-gray-500">|</span>
+        <span class="text-gray-400 text-xs">Setlist · Resources · Participants · Stats</span>
+    </nav>
+
+    <header class="bg-gradient-to-b from-[#03140a] via-[#064e3b] to-[#111827] text-white pt-14 pb-24 px-6 text-center">
+        <span class="bg-white/15 border border-white/20 text-white text-[10px] font-bold tracking-[0.18em] uppercase px-4 py-1.5 rounded-full inline-block mb-5">
+            OPEN MIC SYSTEM · 12 SONGS
+        </span>
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mt-1">Upcoming Open Mic Dashboard</h1>
+        <p class="text-green-200 mt-3 text-sm font-medium opacity-90">Saturday, May 30 · 5:00 PM - 8:00 PM · Blizzard Irvine Campus Courtyard</p>
+        <button onclick="switchPanel('songs', document.querySelector('[data-panel=songs]'))"
+                class="inline-flex items-center gap-2 mt-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white text-xs font-bold px-5 py-2 rounded-full transition-all">
+            <i class="fas fa-music text-[10px]"></i> Browse the setlist
+        </button>
+    </header>
+
+    <section class="max-w-4xl mx-auto -mt-12 bg-[#0f172a] rounded-2xl shadow grid grid-cols-2 md:grid-cols-4 overflow-hidden border border-[#1f2937] relative z-10">
+        <div class="p-5 text-center border-r border-[#1f2937]">
+            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Songs</p>
+            <p class="font-bold text-gray-100 text-sm" id="stat-songs">12</p>
+        </div>
+        <div class="p-5 text-center border-r border-[#1f2937]">
+            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Runtime</p>
+            <p class="font-bold text-gray-100 text-sm" id="stat-runtime">44:02</p>
+        </div>
+        <div class="p-5 text-center border-r border-[#1f2937]">
+            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Rehearsal</p>
+            <p class="font-bold text-gray-100 text-sm" id="stat-rehearsal">3.42 hrs</p>
+        </div>
+        <div class="p-5 text-center">
+            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Performers</p>
+            <p class="font-bold text-gray-100 text-sm" id="stat-performers">18</p>
+        </div>
+    </section>
+
+    <main class="max-w-4xl mx-auto mt-8 px-4 pb-20">
+        <div class="tab-scroll flex gap-1.5 overflow-x-auto pb-1 mb-5">
+            <button class="tab-btn active text-xs font-bold px-4 py-2 rounded-full" data-panel="overview" onclick="switchPanel('overview', this)">Overview</button>
+            <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="songs" onclick="switchPanel('songs', this)">Songs</button>
+            <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="people" onclick="switchPanel('people', this)">People</button>
+            <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="resources" onclick="switchPanel('resources', this)">Resources</button>
+        </div>
+
+        <section id="panel-overview" class="panel active space-y-4">
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <img src="static/venue.jpg" alt="The Nexus venue at Blizzard Irvine Campus Courtyard" class="venue-image w-full rounded-xl border border-[#263244] mb-5">
+                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-2">Event Details</p>
+                        <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">ABK Open Mic Night</h2>
+                        <div class="grid sm:grid-cols-3 gap-3 mt-4">
+                            <div class="dark-soft rounded-xl border border-[#1f2937] px-4 py-3">
+                                <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Date</p>
+                                <p class="text-sm font-bold text-gray-100">Saturday, May 30</p>
+                            </div>
+                            <div class="dark-soft rounded-xl border border-[#1f2937] px-4 py-3">
+                                <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Location</p>
+                                <p class="text-sm font-bold text-gray-100">The Nexus</p>
+                                <a class="text-xs text-green-400 mt-0.5 inline-flex items-center gap-1 hover:underline" href="https://www.google.com/maps/search/?api=1&query=16215%20Alton%20Pkwy%2C%20Irvine%2C%20CA%2092618" target="_blank">
+                                    16215 Alton Pkwy, Irvine, CA 92618
+                                    <i class="fas fa-arrow-up-right-from-square text-[9px]"></i>
+                                </a>
+                            </div>
+                            <div class="dark-soft rounded-xl border border-[#1f2937] px-4 py-3">
+                                <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Time</p>
+                                <p class="text-sm font-bold text-gray-100">5:00 PM - 8:00 PM</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Rehearsals start at 3 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid gap-2 md:mt-7">
+                        <a href="https://docs.google.com/spreadsheets/d/17jHvnjnWp5x6lne5SrOMFQBtISrYMeo7o0jethdRKHA/edit?usp=sharing" target="_blank"
+                           class="link-btn inline-flex items-center justify-center gap-2 rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-sm font-bold text-gray-100">
+                            <i class="fas fa-pen-to-square text-green-400 text-xs"></i>Sign-up Sheet
+                        </a>
+                        <div class="grid grid-cols-2 gap-2">
+                            <a id="google-calendar-link" target="_blank"
+                               class="link-btn inline-flex items-center justify-center gap-2 rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-xs font-bold text-gray-100">
+                                <i class="fas fa-calendar-plus text-green-400 text-xs"></i>Google
+                            </a>
+                            <a id="ics-calendar-link" download="abk-open-mic-night.ics"
+                               class="link-btn inline-flex items-center justify-center gap-2 rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-xs font-bold text-gray-100">
+                                <i class="fas fa-download text-green-400 text-xs"></i>ICS
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-4 gap-2 mt-5" id="countdown">
+                    <div class="count-box rounded-xl p-3 text-center">
+                        <p class="text-2xl font-black text-green-400" id="count-days">--</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-500">Days</p>
+                    </div>
+                    <div class="count-box rounded-xl p-3 text-center">
+                        <p class="text-2xl font-black text-green-400" id="count-hours">--</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-500">Hours</p>
+                    </div>
+                    <div class="count-box rounded-xl p-3 text-center">
+                        <p class="text-2xl font-black text-green-400" id="count-minutes">--</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-500">Min</p>
+                    </div>
+                    <div class="count-box rounded-xl p-3 text-center">
+                        <p class="text-2xl font-black text-green-400" id="count-seconds">--</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-500">Sec</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-sm font-bold text-gray-200">Setlist Coverage</span>
+                    <span class="text-green-400 font-extrabold text-sm" id="coverage-label">0 / 12 ready</span>
+                </div>
+                <div class="w-full bg-[#1f2937] rounded-full h-2">
+                    <div class="bg-green-500 h-2 rounded-full" id="coverage-bar"></div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                    <h2 class="text-base font-extrabold text-gray-100 mb-4">Role Demand</h2>
+                    <div id="role-demand" class="space-y-3"></div>
+                </div>
+                <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                    <h2 class="text-base font-extrabold text-gray-100 mb-4">Rehearsal Load</h2>
+                    <div id="rehearsal-load" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <div class="dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden">
+                <div class="px-6 py-5 border-b border-[#1f2937]">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Setlist Preview</p>
+                    <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Upcoming songs</h2>
+                </div>
+                <div id="overview-list"></div>
+            </div>
+
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-3">Historic Open Mic Events</p>
+                <div class="grid sm:grid-cols-2 gap-3">
+                    <div>
+                        <p class="text-sm font-extrabold text-gray-100 mb-2">2025 Jul</p>
+                        <div class="playlist-frame rounded-xl overflow-hidden">
+                            <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/videoseries?list=PLU2zTgRIY2BChTiBf0RhHrLCPfQZ9V0uX" title="2025 July Open Mic playlist" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                        <a class="link-btn mt-2 inline-flex items-center gap-2 rounded-xl dark-soft border border-[#1f2937] px-3 py-2 text-xs font-bold text-gray-100" href="https://www.youtube.com/playlist?list=PLU2zTgRIY2BChTiBf0RhHrLCPfQZ9V0uX" target="_blank">
+                            <i class="fab fa-youtube text-green-400 text-xs"></i>Open playlist
+                        </a>
+                    </div>
+                    <div>
+                        <p class="text-sm font-extrabold text-gray-100 mb-2">2025 Dec</p>
+                        <div class="playlist-frame rounded-xl overflow-hidden">
+                            <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/videoseries?list=PLU2zTgRIY2BBuM9mOnOU4wFKM93rnX-Yg" title="2025 December Open Mic playlist" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                        <a class="link-btn mt-2 inline-flex items-center gap-2 rounded-xl dark-soft border border-[#1f2937] px-3 py-2 text-xs font-bold text-gray-100" href="https://www.youtube.com/playlist?list=PLU2zTgRIY2BBuM9mOnOU4wFKM93rnX-Yg" target="_blank">
+                            <i class="fab fa-youtube text-green-400 text-xs"></i>Open playlist
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="panel-songs" class="panel space-y-4">
+            <div class="dark-card rounded-2xl p-4 shadow-sm border border-[#1f2937]">
+                <div class="grid md:grid-cols-[1fr_auto_auto] gap-3">
+                    <label class="relative block">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input id="search-input" class="w-full dark-soft border border-[#263244] rounded-xl pl-9 pr-3 py-2.5 text-sm text-gray-100 outline-none focus:border-green-400" placeholder="Search songs, artists, performers, roles">
+                    </label>
+                    <select id="role-filter" class="dark-soft border border-[#263244] rounded-xl px-3 py-2.5 text-sm text-gray-100 outline-none focus:border-green-400">
+                        <option value="all">All roles</option>
+                    </select>
+                    <select id="status-filter" class="dark-soft border border-[#263244] rounded-xl px-3 py-2.5 text-sm text-gray-100 outline-none focus:border-green-400">
+                        <option value="all">All songs</option>
+                        <option value="needs">Has open slot</option>
+                        <option value="ready">Fully assigned</option>
+                    </select>
+                </div>
+            </div>
+            <div id="song-list" class="space-y-3"></div>
+        </section>
+
+        <section id="panel-people" class="panel space-y-4">
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <h2 class="text-base font-extrabold text-gray-100 mb-4">Performer Stats</h2>
+                <div id="people-list" class="space-y-3"></div>
+            </div>
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Free Agents</p>
+                <div class="flex items-center justify-between rounded-xl dark-soft border border-[#1f2937] px-4 py-3">
+                    <span class="text-sm font-bold text-gray-100">Misti Lommen</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-green-400">Photographer</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="panel-resources" class="panel space-y-4">
+            <div class="dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden">
+                <div class="px-6 py-5 border-b border-[#1f2937]">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Links & Sheets</p>
+                    <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Practice resources</h2>
+                </div>
+                <div id="resource-list"></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+    const roles = ["Vocal", "Guitar", "Bass", "Keyboard", "Drum", "Additional Instruments"];
+    const songs = [
+        { title: "Buddy Holly", artist: "Weezer", minutes: 4, seconds: 2, rehearsal: 5, link: "Weezer - Buddy Holly (2024 Remaster)", videoId: "SiJie3Z7DG8", parts: { Vocal: "Misti Lommen", Guitar: ["Randal Droher", "Cedric Loehr"], Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } },
+        { title: "Reward the Scars", artist: "Korn", minutes: 3, seconds: 38, rehearsal: 20, link: "Reward the Scars", videoId: "B-S9od9MbOk", parts: { Vocal: "Trevor Huwe", Guitar: ["Randal Droher", "Kristine Kirchhoff Ashman"], Bass: "Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Chris Dietsch" } },
+        { title: "Daisies", artist: "Justin Bieber", minutes: 2, seconds: 57, rehearsal: 20, link: "Justin Bieber - DAISIES (Audio) - YouTube", videoId: "msGuqelopMA", parts: { Vocal: "Nico Havin", Guitar: "Cedric Loehr", Bass: "Dewey Hur", Drum: "Ockkyoung Leem" } },
+        { title: "Balatro", artist: "Luis Clemente", minutes: 5, seconds: 53, rehearsal: 20, link: "Balatro Main Theme - LIVE BAND Cover | DPGN at OSNYC 4-5-24", videoId: "tURydXfCVlQ", sheet: "https://www.vgleadsheets.com/view/balatro/main-theme?transposition=C", parts: { Guitar: "Randal Droher", Bass: "(maybe) Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Dewey Hur" } },
+        { title: "Overworld", artist: "Koji Kondo", minutes: 3, seconds: 0, rehearsal: 20, link: "Super Mario World Overworld Cover by Bonvi Band", videoId: "H3EGvlW0wMw", sheet: "https://www.vgleadsheets.com/view/super-mario-world/overworld?transposition=C%23", parts: { Guitar: "Cedric Loehr", Bass: "Dewey Hur", Keyboard: "Kristina Wong", Drum: "Ockkyoung Leem" } },
+        { title: "Hysteria", artist: "Muse", minutes: 3, seconds: 47, rehearsal: 10, link: "Muse - Hysteria [Official Music Video]", videoId: "3dm_5qWWDV8", parts: { Vocal: "Justine Hamer", Guitar: "Karn Kaul", Bass: "Donald Lawrenz III", Drum: "Chris Dietsch" } },
+        { title: "With or Without You", artist: "U2", minutes: 4, seconds: 53, rehearsal: 15, link: "U2 - With Or Without You (Official Music Video)", videoId: "ujNeHIo7oTE", parts: { Vocal: "Trevor Huwe", Guitar: "Karn Kaul", Bass: "Dewey Hur", Keyboard: "Randal Droher", Drum: "Chris Dietsch" } },
+        { title: "Barracuda", artist: "Heart", minutes: 4, seconds: 25, rehearsal: 30, link: "Heart - Barracuda (Audio)", videoId: "VdOkQ6THDVw", parts: { Vocal: "Kelly Yeo", Guitar: ["Matthieu Roussotte", "Karn Kaul"], Bass: "Donald Lawrenz III", Drum: "Nathan Bonfiglio" } },
+        { title: "Bad Moon Rising", artist: "Creedence Clearwater Revival", minutes: 2, seconds: 19, rehearsal: 15, link: "Creedence Clearwater Revival - Bad Moon Rising (Official Lyric Video)", videoId: "zUQiUFZ5RDw", parts: { Vocal: "Erin McElroy", Guitar: ["Randal Droher", "Trevor Huwe"], Bass: "Jessica Downey", Drum: "Ockkyoung Leem" } },
+        { title: "I Won't Back Down", artist: "Tom Petty", minutes: 3, seconds: 2, rehearsal: 15, link: "Tom Petty And The Heartbreakers - I Won't Back Down (Official Music Video)", videoId: "nvlTJrNJ5lA", parts: { Vocal: "Erin McElroy", Guitar: ["Matthieu Roussotte", "Trevor Huwe"], Bass: "Jessica Downey", Drum: "Ockkyoung Leem" } },
+        { title: "Give It All", artist: "Masayoshi Soken", minutes: 2, seconds: 44, rehearsal: 30, link: "Arcadion Floor 4 Theme \"Give It All\" (official lyrics in subtitles) - FFXIV OST", videoId: "_htiXfLqXxU", parts: { Vocal: "Kelly Yeo", Guitar: "Randal Droher", Bass: "Dewey Hur", Drum: "Chris Dietsch" } },
+        { title: "Last Nite", artist: "The Strokes", minutes: 3, seconds: 22, rehearsal: 5, link: "Last Nite - YouTube", videoId: "Bn-lcvrMOlc", parts: { Vocal: "Misti Lommen", Guitar: ["Cedric Loehr", "Randal Droher"], Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } }
+    ];
+
+    function seconds(song) { return song.minutes * 60 + song.seconds; }
+    function fmt(total) {
+        const m = Math.floor(total / 60);
+        const s = String(total % 60).padStart(2, "0");
+        return `${m}:${s}`;
+    }
+    function isOpen(value) { return Boolean(value && value.includes("<open>")); }
+    function songReady(song) { return !roles.some(role => isOpen(song.parts[role])); }
+    function partList(value) {
+        if (!value) return [];
+        return Array.isArray(value) ? value : [value];
+    }
+    function partLabel(value) {
+        const players = partList(value);
+        if (!players.length) return "not needed";
+        if (players.some(isOpen)) return "open";
+        return players.join(", ");
+    }
+    function initials(name) {
+        return name.replace("(maybe) ", "").split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0]).join("");
+    }
+    function searchUrl(song) {
+        return `https://www.youtube.com/results?search_query=${encodeURIComponent(song.link)}`;
+    }
+    function embedUrl(song) {
+        return `https://www.youtube-nocookie.com/embed/${song.videoId}`;
+    }
+    function videoEmbed(song) {
+        return `
+            <div class="video-frame rounded-xl overflow-hidden">
+                <iframe class="w-full h-full" src="${embedUrl(song)}" title="${song.title} reference video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>`;
+    }
+    function updateCountdown() {
+        const eventStart = new Date("2026-05-30T17:00:00-07:00").getTime();
+        const diff = Math.max(0, eventStart - Date.now());
+        const days = Math.floor(diff / 86400000);
+        const hours = Math.floor(diff % 86400000 / 3600000);
+        const minutes = Math.floor(diff % 3600000 / 60000);
+        const secondsLeft = Math.floor(diff % 60000 / 1000);
+        document.getElementById("count-days").textContent = String(days);
+        document.getElementById("count-hours").textContent = String(hours).padStart(2, "0");
+        document.getElementById("count-minutes").textContent = String(minutes).padStart(2, "0");
+        document.getElementById("count-seconds").textContent = String(secondsLeft).padStart(2, "0");
+    }
+    function setupCalendarLinks() {
+        const title = "ABK Open Mic Night";
+        const location = "The Nexus, 16215 Alton Pkwy, Irvine, CA 92618";
+        const details = "ABK Open Mic Night at The Nexus - Blizzard Irvine Campus Courtyard. Event: 5:00 PM - 8:00 PM. Rehearsals start at 3:00 PM.";
+        const googleParams = new URLSearchParams({
+            action: "TEMPLATE",
+            text: title,
+            dates: "20260531T000000Z/20260531T030000Z",
+            details,
+            location,
+            ctz: "America/Los_Angeles"
+        });
+        document.getElementById("google-calendar-link").href = `https://calendar.google.com/calendar/render?${googleParams.toString()}`;
+
+        const ics = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "PRODID:-//ABK Open Mic//Open Mic Dashboard//EN",
+            "CALSCALE:GREGORIAN",
+            "METHOD:PUBLISH",
+            "BEGIN:VEVENT",
+            "UID:abk-open-mic-20260530@abk-open-mic-page",
+            "DTSTAMP:20260508T000000Z",
+            "DTSTART:20260531T000000Z",
+            "DTEND:20260531T030000Z",
+            "SUMMARY:ABK Open Mic Night",
+            "LOCATION:The Nexus\\, 16215 Alton Pkwy\\, Irvine\\, CA 92618",
+            "DESCRIPTION:ABK Open Mic Night at The Nexus - Blizzard Irvine Campus Courtyard. Event: 5:00 PM - 8:00 PM. Rehearsals start at 3:00 PM.",
+            "END:VEVENT",
+            "END:VCALENDAR"
+        ].join("\r\n");
+        document.getElementById("ics-calendar-link").href = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+    }
+
+    const roleTotals = Object.fromEntries(roles.map(role => [role, 0]));
+    const people = {};
+    songs.forEach(song => {
+        roles.forEach(role => {
+            partList(song.parts[role]).forEach(player => {
+                if (!player || isOpen(player)) return;
+                roleTotals[role] += 1;
+                const clean = player.replace("(maybe) ", "");
+                people[clean] ||= { total: 0, roles: Object.fromEntries(roles.map(r => [r, 0])) };
+                people[clean].total += 1;
+                people[clean].roles[role] += 1;
+            });
+        });
+    });
+
+    document.getElementById("stat-songs").textContent = songs.length;
+    document.getElementById("stat-runtime").textContent = fmt(songs.reduce((sum, song) => sum + seconds(song), 0));
+    document.getElementById("stat-rehearsal").textContent = `${(songs.reduce((sum, song) => sum + song.rehearsal, 0) / 60).toFixed(2)} hrs`;
+    document.getElementById("stat-performers").textContent = Object.keys(people).length;
+
+    const readyCount = songs.filter(songReady).length;
+    document.getElementById("coverage-label").textContent = `${readyCount} / ${songs.length} ready`;
+    document.getElementById("coverage-bar").style.width = `${Math.round(readyCount / songs.length * 100)}%`;
+
+    const roleFilter = document.getElementById("role-filter");
+    roles.forEach(role => {
+        const option = document.createElement("option");
+        option.value = role;
+        option.textContent = role;
+        roleFilter.appendChild(option);
+    });
+
+    function renderBars(target, entries, max, formatter) {
+        document.getElementById(target).innerHTML = entries.map(([label, value]) => `
+            <div>
+                <div class="flex items-center justify-between text-xs mb-1">
+                    <span class="font-bold text-gray-200">${label}</span>
+                    <span class="text-gray-400 font-bold">${formatter(value)}</span>
+                </div>
+                <div class="w-full bg-[#1f2937] rounded-full"><div class="bar" style="width:${Math.max(8, value / max * 100)}%"></div></div>
+            </div>
+        `).join("");
+    }
+
+    renderBars("role-demand", Object.entries(roleTotals).filter(([, v]) => v > 0), Math.max(...Object.values(roleTotals)), v => `${v} songs`);
+    renderBars("rehearsal-load", songs.slice().sort((a, b) => b.rehearsal - a.rehearsal).slice(0, 6).map(song => [song.title, song.rehearsal]), 30, v => `${v} min`);
+
+    function rolePills(song) {
+        return roles.map(role => {
+            const player = song.parts[role];
+            const players = partList(player);
+            const cls = players.some(isOpen) ? "open-role" : players.length ? "filled" : "";
+            return `<span class="role-pill ${cls} text-[10px] font-bold px-2.5 py-1 rounded-md">${role}: ${partLabel(player)}</span>`;
+        }).join("");
+    }
+
+    function songCard(song, index) {
+        const ready = songReady(song);
+        return `
+        <article class="song-card dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden" data-song-index="${index}">
+            <button class="w-full text-left px-5 py-4 flex items-center gap-4" onclick="toggleSong(${index})">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-black text-sm ${ready ? "bg-green-500 text-white" : "bg-orange-100 text-orange-700"}">
+                    ${ready ? '<i class="fas fa-check text-xs"></i>' : '<i class="fas fa-user-plus text-xs"></i>'}
+                </div>
+                <div class="flex-grow min-w-0">
+                    <p class="text-sm font-extrabold text-gray-100 truncate">${song.title}</p>
+                    <p class="text-xs text-gray-400 mt-0.5 truncate">${song.artist} · ${fmt(seconds(song))} · ${song.rehearsal} min rehearsal</p>
+                </div>
+                <i class="fas fa-chevron-down text-gray-300 text-xs"></i>
+            </button>
+            <div class="song-detail px-5 pb-5">
+                <div class="flex flex-wrap gap-1.5 mb-4">${rolePills(song)}</div>
+                ${videoEmbed(song)}
+                <div class="grid sm:grid-cols-2 gap-2 mt-3">
+                    <a class="link-btn rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-sm font-bold text-gray-200" href="${searchUrl(song)}" target="_blank">
+                        <i class="fas fa-arrow-up-right-from-square text-green-400 text-xs mr-2"></i>Open on YouTube
+                    </a>
+                    ${song.sheet ? `<a class="link-btn rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-sm font-bold text-gray-200" href="${song.sheet}" target="_blank"><i class="fas fa-file-lines text-green-400 text-xs mr-2"></i>Band sheet</a>` : `<div class="rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-sm font-bold text-gray-400"><i class="fas fa-file-lines text-xs mr-2"></i>No sheet listed</div>`}
+                </div>
+            </div>
+        </article>`;
+    }
+
+    function renderSongs() {
+        const query = document.getElementById("search-input").value.toLowerCase().trim();
+        const selectedRole = roleFilter.value;
+        const status = document.getElementById("status-filter").value;
+        const filtered = songs.filter(song => {
+            const haystack = [song.title, song.artist, song.link, ...Object.values(song.parts).flat()].join(" ").toLowerCase();
+            const matchesQuery = !query || haystack.includes(query);
+            const matchesRole = selectedRole === "all" || Boolean(song.parts[selectedRole]);
+            const matchesStatus = status === "all" || (status === "needs" ? !songReady(song) : songReady(song));
+            return matchesQuery && matchesRole && matchesStatus;
+        });
+        document.getElementById("song-list").innerHTML = filtered.length
+            ? filtered.map(song => songCard(song, songs.indexOf(song))).join("")
+            : `<div class="dark-card rounded-2xl p-8 text-center text-sm font-bold text-gray-400 border border-[#1f2937]">No songs match this filter.</div>`;
+    }
+
+    function renderOverview() {
+        document.getElementById("overview-list").innerHTML = songs.map((song, i) => `
+            <button class="w-full flex items-center gap-4 px-5 py-4 border-b border-[#1f2937] last:border-0 hover:bg-[#111827] text-left" onclick="switchPanel('songs', document.querySelector('[data-panel=songs]')); toggleSong(${i});">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-[#1f2937] text-gray-500 font-bold text-sm">${i + 1}</div>
+                <div class="flex-grow min-w-0">
+                    <p class="text-sm font-bold text-gray-100 truncate">${song.title}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">${song.artist} · ${fmt(seconds(song))}</p>
+                </div>
+                <span class="text-[10px] font-black uppercase tracking-widest ${songReady(song) ? "text-green-400" : "text-orange-600"}">${songReady(song) ? "Ready" : "Open slot"}</span>
+            </button>
+        `).join("");
+    }
+
+    function renderPeople() {
+        const sorted = Object.entries(people).sort((a, b) => b[1].total - a[1].total || a[0].localeCompare(b[0]));
+        const max = sorted[0][1].total;
+        document.getElementById("people-list").innerHTML = sorted.map(([name, stats]) => {
+            const topRoles = Object.entries(stats.roles).filter(([, v]) => v).map(([role, count]) => `${role} ${count}`).join(" · ");
+            return `
+            <div class="rounded-xl dark-soft border border-[#1f2937] px-4 py-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-green-500 text-white flex items-center justify-center text-xs font-black">${initials(name)}</div>
+                    <div class="flex-grow min-w-0">
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="text-sm font-extrabold text-gray-100 truncate">${name}</span>
+                            <span class="text-xs font-black text-green-400">${stats.total}</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-0.5 truncate">${topRoles}</p>
+                        <div class="w-full bg-[#263244] rounded-full mt-2"><div class="bar" style="width:${Math.max(8, stats.total / max * 100)}%"></div></div>
+                    </div>
+                </div>
+            </div>`;
+        }).join("");
+    }
+
+    function renderResources() {
+        document.getElementById("resource-list").innerHTML = songs.map(song => `
+            <div class="px-5 py-4 border-b border-[#1f2937] last:border-0">
+                <div class="flex items-start justify-between gap-3 mb-2">
+                    <div>
+                        <p class="text-sm font-extrabold text-gray-100">${song.title}</p>
+                        <p class="text-xs text-gray-400">${song.artist}</p>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">${fmt(seconds(song))}</span>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <a class="link-btn rounded-lg dark-soft border border-[#1f2937] px-3 py-2 text-xs font-bold text-gray-200" href="${searchUrl(song)}" target="_blank"><i class="fas fa-arrow-up-right-from-square text-green-400 mr-1"></i>YouTube</a>
+                    ${song.sheet ? `<a class="link-btn rounded-lg dark-soft border border-[#1f2937] px-3 py-2 text-xs font-bold text-gray-200" href="${song.sheet}" target="_blank"><i class="fas fa-file-lines text-green-400 mr-1"></i>Band Sheet</a>` : ""}
+                </div>
+                <div class="mt-3">${videoEmbed(song)}</div>
+            </div>
+        `).join("");
+    }
+
+    function toggleSong(index) {
+        const card = document.querySelector(`[data-song-index="${index}"]`);
+        if (!card) return;
+        card.classList.toggle("open");
+        card.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+
+    function switchPanel(id, btn) {
+        document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
+        document.querySelectorAll(".tab-btn").forEach(tab => tab.classList.remove("active"));
+        document.getElementById(`panel-${id}`).classList.add("active");
+        if (btn) {
+            btn.classList.add("active");
+            btn.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+        }
+    }
+
+    document.getElementById("search-input").addEventListener("input", renderSongs);
+    roleFilter.addEventListener("change", renderSongs);
+    document.getElementById("status-filter").addEventListener("change", renderSongs);
+
+    renderOverview();
+    renderSongs();
+    renderPeople();
+    renderResources();
+    setupCalendarLinks();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
+
