@@ -256,22 +256,23 @@
     <script>
     const roles = ["Vocal", "Guitar", "Guitar 2", "Bass", "Keyboard", "Drum", "Additional Instruments"];
     const songs = [
-        { title: "A Tout le Monde", artist: "Megadeth (and Cristina Scabbia)", minutes: 4, seconds: 10, rehearsal: 30, practiceSlot: 1, practiceStage: "Main", link: "A Tout le Monde Set Me Free Megadeth Cristina Scabbia", videoId: "iEyOwLY3rV4", parts: { Vocal: "Trevor Huwe", Guitar: "Karn Kaul", "Guitar 2": "<open>", Bass: "Donald Lawrenz III", Drum: "Chris Dietsch" } },
-        { title: "Barracuda", artist: "Heart", minutes: 4, seconds: 25, rehearsal: 30, practiceSlot: 2, practiceStage: "Main", link: "Heart - Barracuda (Audio)", videoId: "VdOkQ6THDVw", parts: { Vocal: "Kelly Yeo", Guitar: ["Karn Kaul", "Matthieu Roussotte"], Bass: "Donald Lawrenz III", Drum: "Nathan Bonfiglio" } },
-        { title: "Give It All", artist: "Masayoshi Soken", minutes: 2, seconds: 44, rehearsal: 30, practiceSlot: 3, practiceStage: "Main", link: "Arcadion Floor 4 Theme \"Give It All\" (official lyrics in subtitles) - FFXIV OST", videoId: "_htiXfLqXxU", sheets: [{ label: "Lead Guitar", url: "static/2026%20May/Give%20it%20all%20-%20Lead%20Guitar.pdf" }, { label: "Rhythm Guitar", url: "static/2026%20May/Give%20it%20all%20-%20Rhythm%20Guitar%206%20Strings.pdf" }, { label: "Bass", url: "static/2026%20May/Give%20it%20all%20-%20Bass%204%20Strings%20(adapted).pdf" }], parts: { Vocal: "Kelly Yeo", Guitar: "Kristine Ashman", Bass: "Dewey Hur", Drum: "Chris Dietsch" } },
-        { title: "Daisies", artist: "Justin Bieber", minutes: 2, seconds: 57, rehearsal: 20, practiceSlot: 1, practiceStage: "Extra", link: "Justin Bieber - DAISIES (Audio) - YouTube", videoId: "msGuqelopMA", parts: { Vocal: "Nico Havin", Guitar: "Cedric Loehr", Bass: "Dewey Hur", Drum: "Ockkyoung Leem" } },
-        { title: "Overworld", artist: "Koji Kondo", minutes: 3, seconds: 0, rehearsal: 20, practiceSlot: 2, practiceStage: "Extra", link: "Super Mario World Overworld Cover by Bonvi Band", videoId: "H3EGvlW0wMw", sheets: [{ label: "Band Sheet", url: "https://www.vgleadsheets.com/view/super-mario-world/overworld?transposition=C%23" }], parts: { Guitar: "Cedric Loehr", Bass: "Dewey Hur", Keyboard: "Kristina Wong", Drum: "Ockkyoung Leem" } },
-        { title: "Balatro", artist: "Luis Clemente", minutes: 5, seconds: 53, rehearsal: 20, practiceSlot: 3, practiceStage: "Extra", link: "Balatro Main Theme - LIVE BAND Cover | DPGN at OSNYC 4-5-24", videoId: "tURydXfCVlQ", sheets: [{ label: "Band Sheet", url: "https://www.vgleadsheets.com/view/balatro/main-theme?transposition=C" }], parts: { Guitar: "Randal Droher", Bass: "Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Dewey Hur" } },
-        { title: "Reward the Scars", artist: "Korn", minutes: 3, seconds: 38, rehearsal: 20, practiceSlot: 4, practiceStage: "Main", link: "Reward the Scars", videoId: "B-S9od9MbOk", parts: { Vocal: "Trevor Huwe", Guitar: "<open>", "Guitar 2": "Kristine Ashman", Bass: "Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Chris Dietsch" } },
-        { title: "I Won't Back Down", artist: "Tom Petty", minutes: 3, seconds: 2, rehearsal: 15, practiceSlot: 5, practiceStage: "Main", link: "Tom Petty And The Heartbreakers - I Won't Back Down (Official Music Video)", videoId: "nvlTJrNJ5lA", parts: { Vocal: "Erin McElroy", Guitar: ["Matthieu Roussotte", "Trevor Huwe"], Bass: "Jessica Downey", Drum: "Chris Dietsch" } },
-        { title: "Bad Moon Rising", artist: "Creedence Clearwater Revival", minutes: 2, seconds: 19, rehearsal: 15, practiceSlot: 6, practiceStage: "Main", link: "Creedence Clearwater Revival - Bad Moon Rising (Official Lyric Video)", videoId: "zUQiUFZ5RDw", parts: { Vocal: "Erin McElroy", Guitar: ["Randal Droher", "Trevor Huwe"], Bass: "Jessica Downey", Drum: "Ockkyoung Leem" } },
-        { title: "With or Without You", artist: "U2", minutes: 4, seconds: 53, rehearsal: 15, practiceSlot: 7, practiceStage: "Main", link: "U2 - With Or Without You (Official Music Video)", videoId: "ujNeHIo7oTE", parts: { Vocal: "Trevor Huwe", Guitar: "Karn Kaul", Bass: "Dewey Hur", Keyboard: "Randal Droher", Drum: "Ockkyoung Leem" } },
-        { title: "Hysteria", artist: "Muse", minutes: 3, seconds: 47, rehearsal: 10, practiceSlot: 8, practiceStage: "Main", link: "Muse - Hysteria [Official Music Video]", videoId: "3dm_5qWWDV8", parts: { Vocal: "Justine Hamer", Guitar: "Karn Kaul", Bass: "Donald Lawrenz III", Drum: "Chris Dietsch" } },
-        { title: "Black Sheep", artist: "Metric", minutes: 4, seconds: 54, rehearsal: 10, practiceSlot: 9, practiceStage: "Main", link: "Metric - Black Sheep", videoId: "USfoTGFGARE", parts: { Vocal: "Katherine Lopez", Guitar: "Katherine Lopez", Bass: "Justine Hamer", Keyboard: "Randal Droher", Drum: "Ben Cunningham" } },
-        { title: "Tequila", artist: "The Champs", minutes: 2, seconds: 13, rehearsal: 10, practiceSlot: 10, practiceStage: "Main", link: "The Champs - Tequila", videoId: "3H6amDbAwlY", parts: { Vocal: "Sophie Bertrand", Guitar: "Randal Droher", Bass: "Dewey Hur", Drum: "<open>", "Additional Instruments": "Sophie Bertrand" } },
-        { title: "Buddy Holly", artist: "Weezer", minutes: 4, seconds: 2, rehearsal: 0, practiceSlot: 11, practiceStage: "Main", link: "Weezer - Buddy Holly (2024 Remaster)", videoId: "SiJie3Z7DG8", parts: { Vocal: "Misti Lommen", Guitar: ["Randal Droher", "Cedric Loehr"], Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } },
-        { title: "Last Nite", artist: "The Strokes", minutes: 3, seconds: 22, rehearsal: 0, practiceSlot: 12, practiceStage: "Main", link: "Last Nite - YouTube", videoId: "Bn-lcvrMOlc", parts: { Vocal: "Misti Lommen", Guitar: ["Randal Droher", "Cedric Loehr"], Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } }
+        { title: "A Tout le Monde", artist: "Megadeth (and Cristina Scabbia)", year: 2007, setOrder: 10, minutes: 4, seconds: 10, rehearsal: 30, practiceSlot: 1, practiceStage: "Main", link: "A Tout le Monde Set Me Free Megadeth Cristina Scabbia", videoId: "iEyOwLY3rV4", parts: { Vocal: "Trevor Huwe", Guitar: "Karn Kaul", "Guitar 2": "<open>", Bass: "Donald Lawrenz III", Drum: "Chris Dietsch" } },
+        { title: "Barracuda", artist: "Heart", year: 1977, setOrder: 3, minutes: 4, seconds: 25, rehearsal: 30, practiceSlot: 2, practiceStage: "Main", link: "Heart - Barracuda (Audio)", videoId: "VdOkQ6THDVw", parts: { Vocal: "Kelly Yeo", Guitar: "Matthieu Roussotte", "Guitar 2": "Karn Kaul", Bass: "Donald Lawrenz III", Drum: "Nathan Bonfiglio" } },
+        { title: "Give It All", artist: "Masayoshi Soken", year: 2024, setOrder: 12, minutes: 2, seconds: 44, rehearsal: 30, practiceSlot: 3, practiceStage: "Main", link: "Arcadion Floor 4 Theme \"Give It All\" (official lyrics in subtitles) - FFXIV OST", videoId: "_htiXfLqXxU", sheets: [{ label: "Lead Guitar", url: "static/2026%20May/Give%20it%20all%20-%20Lead%20Guitar.pdf" }, { label: "Rhythm Guitar", url: "static/2026%20May/Give%20it%20all%20-%20Rhythm%20Guitar%206%20Strings.pdf" }, { label: "Bass", url: "static/2026%20May/Give%20it%20all%20-%20Bass%204%20Strings%20(adapted).pdf" }], parts: { Vocal: "Kelly Yeo", Guitar: "Kristine Kirchhoff Ashman", Bass: "Dewey Hur", Drum: "Chris Dietsch" } },
+        { title: "Daisies", artist: "Justin Bieber", year: 2025, setOrder: 14, minutes: 2, seconds: 57, rehearsal: 20, practiceSlot: 1, practiceStage: "Extra", link: "Justin Bieber - DAISIES (Audio) - YouTube", videoId: "msGuqelopMA", parts: { Vocal: "Nico Havin", Guitar: "Cedric Loehr", Bass: "Dewey Hur", Drum: "Ockkyoung Leem" } },
+        { title: "Overworld", artist: "Koji Kondo", year: 1985, setOrder: 4, minutes: 3, seconds: 0, rehearsal: 20, practiceSlot: 2, practiceStage: "Extra", link: "Super Mario World Overworld Cover by Bonvi Band", videoId: "H3EGvlW0wMw", sheets: [{ label: "Band Sheet", url: "https://www.vgleadsheets.com/view/super-mario-world/overworld?transposition=C%23" }], parts: { Guitar: "Cedric Loehr", Bass: "Dewey Hur", Keyboard: "Kristina Wong", Drum: "Ockkyoung Leem" } },
+        { title: "Balatro", artist: "Luis Clemente", year: 2024, setOrder: 13, minutes: 5, seconds: 53, rehearsal: 20, practiceSlot: 3, practiceStage: "Extra", link: "Balatro Main Theme - LIVE BAND Cover | DPGN at OSNYC 4-5-24", videoId: "tURydXfCVlQ", sheets: [{ label: "Band Sheet", url: "https://www.vgleadsheets.com/view/balatro/main-theme?transposition=C" }], parts: { "Guitar 2": "Randal Droher", Bass: "Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Dewey Hur" } },
+        { title: "Reward the Scars", artist: "Korn", year: 2026, setOrder: 15, minutes: 3, seconds: 38, rehearsal: 20, practiceSlot: 4, practiceStage: "Main", link: "Reward the Scars", videoId: "B-S9od9MbOk", parts: { Vocal: "Trevor Huwe", Guitar: "Kristine Kirchhoff Ashman", "Guitar 2": "Randal Droher", Bass: "Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Chris Dietsch" } },
+        { title: "I Won't Back Down", artist: "Tom Petty", year: 1989, setOrder: 6, minutes: 3, seconds: 2, rehearsal: 15, practiceSlot: 5, practiceStage: "Main", link: "Tom Petty And The Heartbreakers - I Won't Back Down (Official Music Video)", videoId: "nvlTJrNJ5lA", parts: { Vocal: "Erin McElroy", Guitar: "Matthieu Roussotte", "Guitar 2": "Trevor Huwe", Bass: "Jessica Downey", Drum: "Chris Dietsch" } },
+        { title: "Bad Moon Rising", artist: "Creedence Clearwater Revival", year: 1969, setOrder: 2, minutes: 2, seconds: 19, rehearsal: 15, practiceSlot: 6, practiceStage: "Main", link: "Creedence Clearwater Revival - Bad Moon Rising (Official Lyric Video)", videoId: "zUQiUFZ5RDw", parts: { Vocal: "Erin McElroy", Guitar: "Trevor Huwe", "Guitar 2": "Randal Droher", Bass: "Jessica Downey", Drum: "Ockkyoung Leem" } },
+        { title: "With or Without You", artist: "U2", year: 1987, setOrder: 5, minutes: 4, seconds: 53, rehearsal: 15, practiceSlot: 7, practiceStage: "Main", link: "U2 - With Or Without You (Official Music Video)", videoId: "ujNeHIo7oTE", parts: { Vocal: "Trevor Huwe", Guitar: "Karn Kaul", Bass: "Dewey Hur", Keyboard: "Randal Droher", Drum: "Ockkyoung Leem" } },
+        { title: "Hysteria", artist: "Muse", year: 2003, setOrder: 9, minutes: 3, seconds: 47, rehearsal: 10, practiceSlot: 8, practiceStage: "Main", link: "Muse - Hysteria [Official Music Video]", videoId: "3dm_5qWWDV8", parts: { Vocal: "Justine Hamer", Guitar: "Karn Kaul", Bass: "Donald Lawrenz III", Drum: "Chris Dietsch" } },
+        { title: "Black Sheep", artist: "Metric", year: 2010, setOrder: 11, minutes: 4, seconds: 54, rehearsal: 10, practiceSlot: 9, practiceStage: "Main", link: "Metric - Black Sheep", videoId: "USfoTGFGARE", parts: { Vocal: "Katherine Lopez", Guitar: "Katherine Lopez", Bass: "Justine Hamer", Keyboard: "Randal Droher", Drum: "Ben Cunningham" } },
+        { title: "Tequila", artist: "The Champs", year: 1958, setOrder: 1, minutes: 2, seconds: 13, rehearsal: 10, practiceSlot: 10, practiceStage: "Main", link: "The Champs - Tequila", videoId: "3H6amDbAwlY", parts: { Vocal: "Sophie Bertrand", Guitar: "<open>", Bass: "Dewey Hur", Drum: "<open>", "Additional Instruments": "Alto Sax (Sophie Bertrand)" } },
+        { title: "Buddy Holly", artist: "Weezer", year: 1994, setOrder: 7, minutes: 4, seconds: 2, rehearsal: 0, practiceSlot: 11, practiceStage: "Main", link: "Weezer - Buddy Holly (2024 Remaster)", videoId: "SiJie3Z7DG8", parts: { Vocal: "Misti Lommen", Guitar: "Cedric Loehr", "Guitar 2": "Randal Droher", Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } },
+        { title: "Last Nite", artist: "The Strokes", year: 2001, setOrder: 8, minutes: 3, seconds: 22, rehearsal: 0, practiceSlot: 12, practiceStage: "Main", link: "Last Nite - YouTube", videoId: "Bn-lcvrMOlc", parts: { Vocal: "Misti Lommen", Guitar: "Cedric Loehr", "Guitar 2": "Randal Droher", Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } }
     ];
+    const setlistSongs = songs.slice().sort((a, b) => a.setOrder - b.setOrder);
 
     function seconds(song) { return song.minutes * 60 + song.seconds; }
     function fmt(total) {
@@ -473,7 +474,7 @@
         const query = document.getElementById("search-input").value.toLowerCase().trim();
         const selectedRole = roleFilter.value;
         const status = document.getElementById("status-filter").value;
-        const filtered = songs.filter(song => {
+        const filtered = setlistSongs.filter(song => {
             const haystack = [song.title, song.artist, song.link, ...Object.values(song.parts).flat(), ...Object.values(song.extraParts || {}).flat()].join(" ").toLowerCase();
             const matchesQuery = !query || haystack.includes(query);
             const matchesRole = selectedRole === "all" || Boolean(song.parts[selectedRole] || song.extraParts?.[selectedRole]);
@@ -486,12 +487,12 @@
     }
 
     function renderOverview() {
-        document.getElementById("overview-list").innerHTML = songs.map((song, i) => `
-            <button class="w-full flex items-center gap-4 px-5 py-4 border-b border-[#1f2937] last:border-0 hover:bg-[#111827] text-left" onclick="switchPanel('songs', document.querySelector('[data-panel=songs]')); toggleSong(${i});">
+        document.getElementById("overview-list").innerHTML = setlistSongs.map((song, i) => `
+            <button class="w-full flex items-center gap-4 px-5 py-4 border-b border-[#1f2937] last:border-0 hover:bg-[#111827] text-left" onclick="switchPanel('songs', document.querySelector('[data-panel=songs]')); toggleSong(${songs.indexOf(song)});">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-[#1f2937] text-gray-500 font-bold text-sm">${i + 1}</div>
                 <div class="flex-grow min-w-0">
                     <p class="text-sm font-bold text-gray-100 truncate">${song.title}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">${song.artist} · ${fmt(seconds(song))} · ${song.practiceStage} slot ${song.practiceSlot} · ${song.rehearsal} min</p>
+                    <p class="text-xs text-gray-400 mt-0.5">${song.year} · ${song.artist} · ${fmt(seconds(song))}</p>
                 </div>
                 <span class="text-[10px] font-black uppercase tracking-widest ${songReady(song) ? "text-green-400" : "text-orange-600"}">${songReady(song) ? "Ready" : "Open slot"}</span>
             </button>
@@ -540,12 +541,12 @@
     }
 
     function renderResources() {
-        document.getElementById("resource-list").innerHTML = songs.map(song => `
+        document.getElementById("resource-list").innerHTML = setlistSongs.map(song => `
             <div class="px-5 py-4 border-b border-[#1f2937] last:border-0">
                 <div class="flex items-start justify-between gap-3 mb-2">
                     <div>
                         <p class="text-sm font-extrabold text-gray-100">${song.title}</p>
-                        <p class="text-xs text-gray-400">${song.artist}</p>
+                        <p class="text-xs text-gray-400">${song.year} · ${song.artist}</p>
                     </div>
                     <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">${fmt(seconds(song))}</span>
                 </div>
