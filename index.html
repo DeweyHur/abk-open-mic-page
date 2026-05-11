@@ -66,11 +66,11 @@
         </div>
         <div class="p-5 text-center border-r border-[#1f2937]">
             <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Rehearsal</p>
-            <p class="font-bold text-gray-100 text-sm" id="stat-rehearsal">4.17 hrs</p>
+            <p class="font-bold text-gray-100 text-sm" id="stat-rehearsal">2.50 hrs</p>
         </div>
         <div class="p-5 text-center">
             <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Performers</p>
-            <p class="font-bold text-gray-100 text-sm" id="stat-performers">18</p>
+            <p class="font-bold text-gray-100 text-sm" id="stat-performers">21</p>
         </div>
     </section>
 
@@ -149,7 +149,7 @@
             <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
                 <div class="flex justify-between items-center mb-3">
                     <span class="text-sm font-bold text-gray-200">Setlist Coverage</span>
-                    <span class="text-green-400 font-extrabold text-sm" id="coverage-label">0 / 15 ready</span>
+                    <span class="text-green-400 font-extrabold text-sm" id="coverage-label">12 / 15 ready</span>
                 </div>
                 <div class="w-full bg-[#1f2937] rounded-full h-2">
                     <div class="bg-green-500 h-2 rounded-full" id="coverage-bar"></div>
@@ -246,24 +246,25 @@
     </main>
 
     <script>
-    const roles = ["Vocal", "Guitar", "Bass", "Keyboard", "Drum", "Additional Instruments"];
+    const roles = ["Vocal", "Guitar", "Bass", "Keyboard", "Drum"];
     const songs = [
-        { title: "Buddy Holly", artist: "Weezer", minutes: 4, seconds: 2, rehearsal: 5, link: "Weezer - Buddy Holly (2024 Remaster)", videoId: "SiJie3Z7DG8", parts: { Vocal: "Misti Lommen", Guitar: ["Randal Droher", "Cedric Loehr"], Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } },
-        { title: "Reward the Scars", artist: "Korn", minutes: 3, seconds: 38, rehearsal: 20, link: "Reward the Scars", videoId: "B-S9od9MbOk", parts: { Vocal: "Trevor Huwe", Guitar: ["Randal Droher", "Kristine Kirchhoff Ashman"], Bass: "Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Chris Dietsch" } },
-        { title: "Daisies", artist: "Justin Bieber", minutes: 2, seconds: 57, rehearsal: 20, link: "Justin Bieber - DAISIES (Audio) - YouTube", videoId: "msGuqelopMA", parts: { Vocal: "Nico Havin", Guitar: "Cedric Loehr", Bass: "Dewey Hur", Drum: "Ockkyoung Leem" } },
-        { title: "Balatro", artist: "Luis Clemente", minutes: 5, seconds: 53, rehearsal: 20, link: "Balatro Main Theme - LIVE BAND Cover | DPGN at OSNYC 4-5-24", videoId: "tURydXfCVlQ", sheets: [{ label: "Band Sheet", url: "https://www.vgleadsheets.com/view/balatro/main-theme?transposition=C" }], parts: { Guitar: "Randal Droher", Bass: "Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Dewey Hur" } },
-        { title: "Overworld", artist: "Koji Kondo", minutes: 3, seconds: 0, rehearsal: 20, link: "Super Mario World Overworld Cover by Bonvi Band", videoId: "H3EGvlW0wMw", sheets: [{ label: "Band Sheet", url: "https://www.vgleadsheets.com/view/super-mario-world/overworld?transposition=C%23" }], parts: { Guitar: "Cedric Loehr", Bass: "Dewey Hur", Keyboard: "Kristina Wong", Drum: "Ockkyoung Leem" } },
-        { title: "Hysteria", artist: "Muse", minutes: 3, seconds: 47, rehearsal: 10, link: "Muse - Hysteria [Official Music Video]", videoId: "3dm_5qWWDV8", parts: { Vocal: "Justine Hamer", Guitar: "Karn Kaul", Bass: "Donald Lawrenz III", Drum: "Chris Dietsch" } },
-        { title: "With or Without You", artist: "U2", minutes: 4, seconds: 53, rehearsal: 15, link: "U2 - With Or Without You (Official Music Video)", videoId: "ujNeHIo7oTE", parts: { Vocal: "Trevor Huwe", Guitar: "Karn Kaul", Bass: "Dewey Hur", Keyboard: "Randal Droher", Drum: "Chris Dietsch" } },
-        { title: "Barracuda", artist: "Heart", minutes: 4, seconds: 25, rehearsal: 30, link: "Heart - Barracuda (Audio)", videoId: "VdOkQ6THDVw", parts: { Vocal: "Kelly Yeo", Guitar: ["Matthieu Roussotte", "Karn Kaul"], Bass: "Donald Lawrenz III", Drum: "Nathan Bonfiglio" } },
-        { title: "Bad Moon Rising", artist: "Creedence Clearwater Revival", minutes: 2, seconds: 19, rehearsal: 15, link: "Creedence Clearwater Revival - Bad Moon Rising (Official Lyric Video)", videoId: "zUQiUFZ5RDw", parts: { Vocal: "Erin McElroy", Guitar: ["Randal Droher", "Trevor Huwe"], Bass: "Jessica Downey", Drum: "Ockkyoung Leem" } },
-        { title: "I Won't Back Down", artist: "Tom Petty", minutes: 3, seconds: 2, rehearsal: 15, link: "Tom Petty And The Heartbreakers - I Won't Back Down (Official Music Video)", videoId: "nvlTJrNJ5lA", parts: { Vocal: "Erin McElroy", Guitar: ["Matthieu Roussotte", "Trevor Huwe"], Bass: "Jessica Downey", Drum: "Ockkyoung Leem" } },
-        { title: "Give It All", artist: "Masayoshi Soken", minutes: 2, seconds: 44, rehearsal: 30, link: "Arcadion Floor 4 Theme \"Give It All\" (official lyrics in subtitles) - FFXIV OST", videoId: "_htiXfLqXxU", sheets: [{ label: "Lead Guitar", url: "static/2026%20May/Give%20it%20all%20-%20Lead%20Guitar.pdf" }, { label: "Rhythm Guitar", url: "static/2026%20May/Give%20it%20all%20-%20Rhythm%20Guitar%206%20Strings.pdf" }, { label: "Bass", url: "static/2026%20May/Give%20it%20all%20-%20Bass%204%20Strings%20(adapted).pdf" }], parts: { Vocal: "Kelly Yeo", Guitar: "Kristine Kirchhoff Ashman", Bass: "Dewey Hur", Drum: "Chris Dietsch" } },
-        { title: "Last Nite", artist: "The Strokes", minutes: 3, seconds: 22, rehearsal: 5, link: "Last Nite - YouTube", videoId: "Bn-lcvrMOlc", parts: { Vocal: "Misti Lommen", Guitar: ["Cedric Loehr", "Randal Droher"], Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } },
-        { title: "A Tout le Monde", artist: "Megadeth", minutes: 4, seconds: 28, rehearsal: 15, link: "Megadeth - A Tout Le Monde [OFFICIAL VIDEO]", videoId: "iEyOwLY3rV4", parts: { Vocal: "Trevor Huwe", Guitar: "Karn Kaul", Bass: "<open>", Drum: "<open>" } },
-        { title: "Black Sheep", artist: "Metric ft. Brie Larson", minutes: 4, seconds: 54, rehearsal: 15, link: "Metric - Black Sheep (Brie Larson Vocal Version) ft. Brie Larson", videoId: "1xcSDYy3Dl4", parts: { Vocal: "<open>", Guitar: "<open>", Bass: "<open>", Keyboard: "<open>", Drum: "<open>" } },
-        { title: "Tequila", artist: "The Champs", minutes: 2, seconds: 15, rehearsal: 15, link: "Tequila", videoId: "4hswHOEQfj8", parts: { Vocal: "<open>", Guitar: "<open>", Bass: "<open>", Keyboard: "<open>", Drum: "<open>", "Additional Instruments": "<open>" } }
+        { title: "Buddy Holly", artist: "Weezer", minutes: 4, seconds: 2, difficulty: 1, link: "Weezer - Buddy Holly (2024 Remaster)", videoId: "SiJie3Z7DG8", parts: { Vocal: "Misti Lommen", Guitar: ["Randal Droher", "Cedric Loehr"], Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } },
+        { title: "Reward the Scars", artist: "Korn", minutes: 3, seconds: 38, difficulty: 3, link: "Reward the Scars", videoId: "B-S9od9MbOk", parts: { Vocal: "Trevor Huwe", Guitar: ["Randal Droher", "Kristine Kirchhoff Ashman"], Bass: "Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Chris Dietsch" } },
+        { title: "Daisies", artist: "Justin Bieber", minutes: 2, seconds: 57, difficulty: 2, link: "Justin Bieber - DAISIES (Audio) - YouTube", videoId: "msGuqelopMA", parts: { Vocal: "Nico Havin", Guitar: "Cedric Loehr", Bass: "Dewey Hur", Drum: "Ockkyoung Leem" } },
+        { title: "Balatro", artist: "Luis Clemente", minutes: 5, seconds: 53, difficulty: 4, link: "Balatro Main Theme - LIVE BAND Cover | DPGN at OSNYC 4-5-24", videoId: "tURydXfCVlQ", sheets: [{ label: "Band Sheet", url: "https://www.vgleadsheets.com/view/balatro/main-theme?transposition=C" }], parts: { Guitar: "Randal Droher", Bass: "Donald Lawrenz III", Keyboard: "Kristina Wong", Drum: "Dewey Hur" } },
+        { title: "Overworld", artist: "Koji Kondo", minutes: 3, seconds: 0, difficulty: 4, link: "Super Mario World Overworld Cover by Bonvi Band", videoId: "H3EGvlW0wMw", sheets: [{ label: "Band Sheet", url: "https://www.vgleadsheets.com/view/super-mario-world/overworld?transposition=C%23" }], parts: { Guitar: "Cedric Loehr", Bass: "Dewey Hur", Keyboard: "Kristina Wong", Drum: "Ockkyoung Leem" } },
+        { title: "Hysteria", artist: "Muse", minutes: 3, seconds: 47, difficulty: 4, link: "Muse - Hysteria [Official Music Video]", videoId: "3dm_5qWWDV8", parts: { Vocal: "Justine Hamer", Guitar: "Karn Kaul", Bass: "Donald Lawrenz III", Drum: "Chris Dietsch" } },
+        { title: "With or Without You", artist: "U2", minutes: 4, seconds: 53, difficulty: 2, link: "U2 - With Or Without You (Official Music Video)", videoId: "ujNeHIo7oTE", parts: { Vocal: "Trevor Huwe", Guitar: "Karn Kaul", Bass: "Dewey Hur", Keyboard: "Randal Droher", Drum: "Chris Dietsch" } },
+        { title: "Barracuda", artist: "Heart", minutes: 4, seconds: 25, difficulty: 5, link: "Heart - Barracuda (Audio)", videoId: "VdOkQ6THDVw", parts: { Vocal: "Kelly Yeo", Guitar: ["Matthieu Roussotte", "Karn Kaul"], Bass: "Donald Lawrenz III", Drum: "Nathan Bonfiglio" } },
+        { title: "Bad Moon Rising", artist: "Creedence Clearwater Revival", minutes: 2, seconds: 19, difficulty: 2, link: "Creedence Clearwater Revival - Bad Moon Rising (Official Lyric Video)", videoId: "zUQiUFZ5RDw", parts: { Vocal: "Erin McElroy", Guitar: ["Randal Droher", "Trevor Huwe"], Bass: "Jessica Downey", Drum: "Ockkyoung Leem" } },
+        { title: "I Won't Back Down", artist: "Tom Petty", minutes: 3, seconds: 2, difficulty: 2, link: "Tom Petty And The Heartbreakers - I Won't Back Down (Official Music Video)", videoId: "nvlTJrNJ5lA", parts: { Vocal: "Erin McElroy", Guitar: ["Matthieu Roussotte", "Trevor Huwe"], Bass: "Jessica Downey", Drum: "Ockkyoung Leem" } },
+        { title: "Give It All", artist: "Masayoshi Soken", minutes: 2, seconds: 44, difficulty: 5, link: "Arcadion Floor 4 Theme \"Give It All\" (official lyrics in subtitles) - FFXIV OST", videoId: "_htiXfLqXxU", sheets: [{ label: "Lead Guitar", url: "static/2026%20May/Give%20it%20all%20-%20Lead%20Guitar.pdf" }, { label: "Rhythm Guitar", url: "static/2026%20May/Give%20it%20all%20-%20Rhythm%20Guitar%206%20Strings.pdf" }, { label: "Bass", url: "static/2026%20May/Give%20it%20all%20-%20Bass%204%20Strings%20(adapted).pdf" }], parts: { Vocal: "Kelly Yeo", Guitar: "Kristine Kirchhoff Ashman", Bass: "Dewey Hur", Drum: "Chris Dietsch" } },
+        { title: "Last Nite", artist: "The Strokes", minutes: 3, seconds: 22, difficulty: 1, link: "Last Nite - YouTube", videoId: "Bn-lcvrMOlc", parts: { Vocal: "Misti Lommen", Guitar: ["Cedric Loehr", "Randal Droher"], Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } },
+        { title: "A Tout le Monde", artist: "Megadeth (and Cristina Scabbia)", minutes: 4, seconds: 28, difficulty: 4, link: "Megadeth - A Tout Le Monde [OFFICIAL VIDEO]", videoId: "iEyOwLY3rV4", parts: { Vocal: "Trevor Huwe", Guitar: ["Karn Kaul", "<open>"], Bass: "<open>", Drum: "Chris Dietsch" } },
+        { title: "Black Sheep", artist: "Metric", minutes: 4, seconds: 54, difficulty: 3, link: "Metric - Black Sheep (Brie Larson Vocal Version) ft. Brie Larson", videoId: "1xcSDYy3Dl4", parts: { Vocal: "Katherine Lopez", Guitar: "Katherine Lopez", Bass: "<open>", Keyboard: "<open>", Drum: "Ben Cunningham" } },
+        { title: "Tequila", artist: "The Champs", minutes: 2, seconds: 15, difficulty: 2, link: "Tequila", videoId: "4hswHOEQfj8", parts: { Vocal: "Sophie Bertrand", Guitar: "<open>", Bass: "Dewey Hur", Drum: "<open>" }, extraParts: { "Alto Sax": "Sophie Bertrand" } }
     ];
+    const rehearsalBudget = 150;
 
     function seconds(song) { return song.minutes * 60 + song.seconds; }
     function fmt(total) {
@@ -272,7 +273,11 @@
         return `${m}:${s}`;
     }
     function isOpen(value) { return Boolean(value && value.includes("<open>")); }
-    function songReady(song) { return !roles.some(role => isOpen(song.parts[role])); }
+    function extraRoles(song) { return Object.keys(song.extraParts || {}); }
+    function songReady(song) {
+        return !roles.some(role => isOpen(song.parts[role]))
+            && !extraRoles(song).some(role => isOpen(song.extraParts[role]));
+    }
     function partList(value) {
         if (!value) return [];
         return Array.isArray(value) ? value : [value];
@@ -285,6 +290,18 @@
     }
     function initials(name) {
         return name.replace("(maybe) ", "").split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0]).join("");
+    }
+    function rehearsalPlan() {
+        const totalDifficulty = songs.reduce((sum, song) => sum + song.difficulty, 0);
+        let allocated = 0;
+        const plan = songs.map(song => {
+            const exact = song.difficulty / totalDifficulty * rehearsalBudget;
+            const minutes = Math.floor(exact);
+            allocated += minutes;
+            return { song, minutes, remainder: exact - minutes };
+        }).sort((a, b) => b.remainder - a.remainder);
+        for (let i = 0; i < rehearsalBudget - allocated; i += 1) plan[i].minutes += 1;
+        return plan.sort((a, b) => b.minutes - a.minutes || b.song.difficulty - a.song.difficulty || a.song.title.localeCompare(b.song.title));
     }
     function sheetLinks(song) {
         if (!song.sheets?.length) return `<div class="rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-sm font-bold text-gray-400"><i class="fas fa-file-lines text-xs mr-2"></i>No sheet listed</div>`;
@@ -348,15 +365,17 @@
         document.getElementById("ics-calendar-link").href = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
     }
 
-    const roleTotals = Object.fromEntries(roles.map(role => [role, 0]));
+    const allRoles = [...new Set([...roles, ...songs.flatMap(extraRoles)])];
+    const roleTotals = Object.fromEntries(allRoles.map(role => [role, 0]));
     const people = {};
     songs.forEach(song => {
-        roles.forEach(role => {
-            partList(song.parts[role]).forEach(player => {
+        allRoles.forEach(role => {
+            const part = song.parts[role] || song.extraParts?.[role];
+            partList(part).forEach(player => {
                 if (!player || isOpen(player)) return;
                 roleTotals[role] += 1;
                 const clean = player.replace("(maybe) ", "");
-                people[clean] ||= { total: 0, roles: Object.fromEntries(roles.map(r => [r, 0])) };
+                people[clean] ||= { total: 0, roles: Object.fromEntries(allRoles.map(r => [r, 0])) };
                 people[clean].total += 1;
                 people[clean].roles[role] += 1;
             });
@@ -365,7 +384,7 @@
 
     document.getElementById("stat-songs").textContent = songs.length;
     document.getElementById("stat-runtime").textContent = fmt(songs.reduce((sum, song) => sum + seconds(song), 0));
-    document.getElementById("stat-rehearsal").textContent = `${(songs.reduce((sum, song) => sum + song.rehearsal, 0) / 60).toFixed(2)} hrs`;
+    document.getElementById("stat-rehearsal").textContent = `${(rehearsalBudget / 60).toFixed(2)} hrs`;
     document.getElementById("stat-performers").textContent = Object.keys(people).length;
 
     const readyCount = songs.filter(songReady).length;
@@ -373,7 +392,7 @@
     document.getElementById("coverage-bar").style.width = `${Math.round(readyCount / songs.length * 100)}%`;
 
     const roleFilter = document.getElementById("role-filter");
-    roles.forEach(role => {
+    allRoles.forEach(role => {
         const option = document.createElement("option");
         option.value = role;
         option.textContent = role;
@@ -392,12 +411,13 @@
         `).join("");
     }
 
+    const rehearsalEntries = rehearsalPlan().map(({ song, minutes }) => [song.title, minutes]);
     renderBars("role-demand", Object.entries(roleTotals).filter(([, v]) => v > 0), Math.max(...Object.values(roleTotals)), v => `${v} songs`);
-    renderBars("rehearsal-load", songs.slice().sort((a, b) => b.rehearsal - a.rehearsal).slice(0, 6).map(song => [song.title, song.rehearsal]), 30, v => `${v} min`);
+    renderBars("rehearsal-load", rehearsalEntries, Math.max(...rehearsalEntries.map(([, v]) => v)), v => `${v} min`);
 
     function rolePills(song) {
-        return roles.map(role => {
-            const player = song.parts[role];
+        return [...roles, ...extraRoles(song)].map(role => {
+            const player = song.parts[role] || song.extraParts?.[role];
             const players = partList(player);
             const cls = players.some(isOpen) ? "open-role" : players.length ? "filled" : "";
             return `<span class="role-pill ${cls} text-[10px] font-bold px-2.5 py-1 rounded-md">${role}: ${partLabel(player)}</span>`;
@@ -414,7 +434,7 @@
                 </div>
                 <div class="flex-grow min-w-0">
                     <p class="text-sm font-extrabold text-gray-100 truncate">${song.title}</p>
-                    <p class="text-xs text-gray-400 mt-0.5 truncate">${song.artist} · ${fmt(seconds(song))} · ${song.rehearsal} min rehearsal</p>
+                    <p class="text-xs text-gray-400 mt-0.5 truncate">${song.artist} · ${fmt(seconds(song))} · difficulty ${song.difficulty}/5</p>
                 </div>
                 <i class="fas fa-chevron-down text-gray-300 text-xs"></i>
             </button>
@@ -436,9 +456,9 @@
         const selectedRole = roleFilter.value;
         const status = document.getElementById("status-filter").value;
         const filtered = songs.filter(song => {
-            const haystack = [song.title, song.artist, song.link, ...Object.values(song.parts).flat()].join(" ").toLowerCase();
+            const haystack = [song.title, song.artist, song.link, ...Object.values(song.parts).flat(), ...Object.values(song.extraParts || {}).flat()].join(" ").toLowerCase();
             const matchesQuery = !query || haystack.includes(query);
-            const matchesRole = selectedRole === "all" || Boolean(song.parts[selectedRole]);
+            const matchesRole = selectedRole === "all" || Boolean(song.parts[selectedRole] || song.extraParts?.[selectedRole]);
             const matchesStatus = status === "all" || (status === "needs" ? !songReady(song) : songReady(song));
             return matchesQuery && matchesRole && matchesStatus;
         });
