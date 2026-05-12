@@ -47,8 +47,9 @@
         <span class="bg-white/15 border border-white/20 text-white text-[10px] font-bold tracking-[0.18em] uppercase px-4 py-1.5 rounded-full inline-block mb-5">
             OPEN MIC SYSTEM · 15 SONGS
         </span>
-        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mt-1">Upcoming Open Mic Dashboard</h1>
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mt-1">Open Mic Through the Years</h1>
         <p class="text-green-200 mt-3 text-sm font-medium opacity-90">Saturday, May 30 · 5:00 PM - 8:00 PM · Blizzard Irvine Campus Courtyard</p>
+        <p class="max-w-2xl mx-auto text-green-100/90 mt-3 text-sm leading-6">A play-order timeline that moves from early rock roots into the mid-90s, then forward through 2026.</p>
         <button onclick="switchPanel('songs', document.querySelector('[data-panel=songs]'))"
                 class="inline-flex items-center gap-2 mt-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white text-xs font-bold px-5 py-2 rounded-full transition-all">
             <i class="fas fa-music text-[10px]"></i> Browse the setlist
@@ -89,6 +90,7 @@
                     <div>
                         <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-2">Event Details</p>
                         <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">ABK Open Mic Night</h2>
+                        <p class="text-sm text-gray-400 mt-2 max-w-xl">The setlist is ordered like a timeline: classic foundations, the mid-90s shift, 2000s staples, and newer songs carrying us into 2026.</p>
                         <div class="grid sm:grid-cols-3 gap-3 mt-4">
                             <div class="dark-soft rounded-xl border border-[#1f2937] px-4 py-3">
                                 <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Date</p>
@@ -177,8 +179,8 @@
 
             <div class="dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden">
                 <div class="px-6 py-5 border-b border-[#1f2937]">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Setlist Preview</p>
-                    <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Upcoming songs</h2>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Setlist Timeline</p>
+                    <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Playing order by year</h2>
                 </div>
                 <div id="overview-list"></div>
             </div>
@@ -448,8 +450,8 @@
         return `
         <article class="song-card dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden" data-song-index="${index}">
             <button class="w-full text-left px-5 py-4 flex items-center gap-4" onclick="toggleSong(${index})">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-black text-sm ${ready ? "bg-green-500 text-white" : "bg-orange-100 text-orange-700"}">
-                    ${ready ? '<i class="fas fa-check text-xs"></i>' : '<i class="fas fa-user-plus text-xs"></i>'}
+                <div class="w-12 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-black text-xs ${ready ? "bg-green-500 text-white" : "bg-orange-100 text-orange-700"}">
+                    ${song.year}
                 </div>
                 <div class="flex-grow min-w-0">
                     <p class="text-sm font-extrabold text-gray-100 truncate">${song.title}</p>
@@ -489,10 +491,10 @@
     function renderOverview() {
         document.getElementById("overview-list").innerHTML = setlistSongs.map((song, i) => `
             <button class="w-full flex items-center gap-4 px-5 py-4 border-b border-[#1f2937] last:border-0 hover:bg-[#111827] text-left" onclick="switchPanel('songs', document.querySelector('[data-panel=songs]')); toggleSong(${songs.indexOf(song)});">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-[#1f2937] text-gray-500 font-bold text-sm">${i + 1}</div>
+                <div class="w-12 h-9 rounded-xl flex items-center justify-center bg-[#1f2937] text-gray-300 font-black text-xs">${song.year}</div>
                 <div class="flex-grow min-w-0">
                     <p class="text-sm font-bold text-gray-100 truncate">${song.title}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">${song.year} · ${song.artist} · ${fmt(seconds(song))}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">#{i + 1} · ${song.artist} · ${fmt(seconds(song))}</p>
                 </div>
                 <span class="text-[10px] font-black uppercase tracking-widest ${songReady(song) ? "text-green-400" : "text-orange-600"}">${songReady(song) ? "Ready" : "Open slot"}</span>
             </button>
