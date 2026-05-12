@@ -34,6 +34,8 @@
         .count-box { background: #020617; border: 1px solid #1f2937; }
         .playlist-frame { aspect-ratio: 16 / 9; background: #020617; border: 1px solid #263244; }
         .venue-image { aspect-ratio: 16 / 9; object-fit: cover; }
+        .schedule-row.highlight { background: #0f766e; color: #f0fdfa; }
+        .schedule-row.muted { background: #1f2937; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -48,7 +50,7 @@
             OPEN MIC SYSTEM · 15 SONGS
         </span>
         <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mt-1">Open Mic Through the Years</h1>
-        <p class="text-green-200 mt-3 text-sm font-medium opacity-90">Saturday, May 30 · 5:00 PM - 8:00 PM · Blizzard Irvine Campus Courtyard</p>
+        <p class="text-green-200 mt-3 text-sm font-medium opacity-90">Saturday, May 30 · 6:00 PM - 7:40 PM · Blizzard Irvine Campus Courtyard</p>
         <p class="max-w-2xl mx-auto text-green-100/90 mt-3 text-sm leading-6">A play-order timeline that moves from early rock roots into the mid-90s, then forward through 2026.</p>
         <button onclick="switchPanel('songs', document.querySelector('[data-panel=songs]'))"
                 class="inline-flex items-center gap-2 mt-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white text-xs font-bold px-5 py-2 rounded-full transition-all">
@@ -78,6 +80,7 @@
     <main class="max-w-4xl mx-auto mt-8 px-4 pb-20">
         <div class="tab-scroll flex gap-1.5 overflow-x-auto pb-1 mb-5">
             <button class="tab-btn active text-xs font-bold px-4 py-2 rounded-full" data-panel="overview" onclick="switchPanel('overview', this)">Overview</button>
+            <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="rehearsal" onclick="switchPanel('rehearsal', this)">Rehearsal</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="songs" onclick="switchPanel('songs', this)">Songs</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="people" onclick="switchPanel('people', this)">People</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="gear" onclick="switchPanel('gear', this)">Gear</button>
@@ -107,8 +110,8 @@
                             </div>
                             <div class="dark-soft rounded-xl border border-[#1f2937] px-4 py-3">
                                 <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Time</p>
-                                <p class="text-sm font-bold text-gray-100">5:00 PM - 8:00 PM</p>
-                                <p class="text-xs text-gray-400 mt-0.5">Rehearsals start at 3 PM</p>
+                                <p class="text-sm font-bold text-gray-100">6:00 PM - 7:40 PM</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Setup at 1 PM, practice at 3 PM</p>
                             </div>
                         </div>
                     </div>
@@ -149,6 +152,27 @@
                 </div>
             </div>
 
+            <div class="dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden">
+                <div class="px-6 py-5 border-b border-[#1f2937]">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Show Timetable</p>
+                    <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Run of show</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[680px] text-left text-sm">
+                        <thead class="bg-[#020617] text-gray-400 text-[10px] font-black uppercase tracking-widest">
+                            <tr>
+                                <th class="px-5 py-3">Start</th>
+                                <th class="px-5 py-3">Activity / Song</th>
+                                <th class="px-5 py-3">Original Artist</th>
+                                <th class="px-5 py-3 text-right">Mins</th>
+                                <th class="px-5 py-3 text-right">End</th>
+                            </tr>
+                        </thead>
+                        <tbody id="show-timetable"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
                 <div class="flex justify-between items-center mb-3">
                     <span class="text-sm font-bold text-gray-200">Setlist Coverage</span>
@@ -156,25 +180,6 @@
                 </div>
                 <div class="w-full bg-[#1f2937] rounded-full h-2">
                     <div class="bg-green-500 h-2 rounded-full" id="coverage-bar"></div>
-                </div>
-            </div>
-
-            <div class="dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden">
-                <div class="px-6 py-5 border-b border-[#1f2937]">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Rehearsal Plan</p>
-                    <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Distributed practice times</h2>
-                </div>
-                <div id="rehearsal-schedule"></div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-4">
-                <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
-                    <h2 class="text-base font-extrabold text-gray-100 mb-4">Role Demand</h2>
-                    <div id="role-demand" class="space-y-3"></div>
-                </div>
-                <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
-                    <h2 class="text-base font-extrabold text-gray-100 mb-4">Rehearsal Load</h2>
-                    <div id="rehearsal-load" class="space-y-3"></div>
                 </div>
             </div>
 
@@ -207,6 +212,27 @@
                             <i class="fab fa-youtube text-green-400 text-xs"></i>Open playlist
                         </a>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="panel-rehearsal" class="panel space-y-4">
+            <div class="dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden">
+                <div class="px-6 py-5 border-b border-[#1f2937]">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Rehearsal Plan</p>
+                    <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Distributed practice times</h2>
+                </div>
+                <div id="rehearsal-schedule"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                    <h2 class="text-base font-extrabold text-gray-100 mb-4">Role Demand</h2>
+                    <div id="role-demand" class="space-y-3"></div>
+                </div>
+                <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                    <h2 class="text-base font-extrabold text-gray-100 mb-4">Rehearsal Load</h2>
+                    <div id="rehearsal-load" class="space-y-3"></div>
                 </div>
             </div>
         </section>
@@ -285,6 +311,28 @@
         { title: "Last Nite", artist: "The Strokes", year: 2001, setOrder: 8, minutes: 3, seconds: 22, rehearsal: 0, practiceSlot: 12, practiceStage: "Main", link: "Last Nite - YouTube", videoId: "Bn-lcvrMOlc", parts: { Vocal: "Misti Lommen", Guitar: "Cedric Loehr", "Guitar 2": "Randal Droher", Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } }
     ];
     const setlistSongs = songs.slice().sort((a, b) => a.setOrder - b.setOrder);
+    const showTimetable = [
+        { start: "1:00", activity: "Setup", artist: "", mins: 120, end: "3:00", type: "muted" },
+        { start: "3:00", activity: "Practice", artist: "", mins: 180, end: "6:00", type: "highlight" },
+        { start: "6:00", activity: "Opening", artist: "", mins: 10, end: "6:10", type: "highlight" },
+        { start: "6:10", activity: "Tequila", artist: "The Champs", mins: 3, end: "6:14", type: "muted" },
+        { start: "6:14", activity: "Bad Moon Rising", artist: "Creedence Clearwater Revival", mins: 3, end: "6:19" },
+        { start: "6:19", activity: "Barracuda", artist: "Heart", mins: 5, end: "6:26", type: "muted" },
+        { start: "6:26", activity: "Overworld", artist: "Koji Kondo", mins: 3, end: "6:31" },
+        { start: "6:31", activity: "With or Without You", artist: "U2", mins: 5, end: "6:38", type: "muted" },
+        { start: "6:38", activity: "I Won't Back Down", artist: "Tom Petty", mins: 3, end: "6:43" },
+        { start: "6:43", activity: "Buddy Holly", artist: "Weezer", mins: 3, end: "6:48", type: "muted" },
+        { start: "6:48", activity: "Last Nite", artist: "The Strokes", mins: 3, end: "6:51" },
+        { start: "6:51", activity: "Hysteria", artist: "Muse", mins: 4, end: "6:57", type: "muted" },
+        { start: "6:57", activity: "A Tout le Monde", artist: "Megadeth (and Cristina Scabbia)", mins: 5, end: "7:03" },
+        { start: "7:03", activity: "Black Sheep", artist: "Metric", mins: 5, end: "7:10", type: "muted" },
+        { start: "7:10", activity: "Give It All", artist: "Masayoshi Soken", mins: 6, end: "7:18" },
+        { start: "7:18", activity: "Balatro", artist: "Luis Clemente", mins: 4, end: "7:24", type: "muted" },
+        { start: "7:24", activity: "Daisies", artist: "Justin Bieber", mins: 3, end: "7:29" },
+        { start: "7:29", activity: "Reward the Scars", artist: "Korn", mins: 4, end: "7:35", type: "muted" },
+        { start: "7:35", activity: "Closing", artist: "", mins: 5, end: "7:40", type: "highlight" },
+        { start: "7:40", activity: "Tear Down", artist: "", mins: 90, end: "9:10", type: "muted" }
+    ];
     const gear = [
         { category: "Backline", item: "PA Loudspeakers", details: "Ingenia IG4TR x2 + Ingenia IGS1 x2", owner: "Blizzard", shareable: "Yes", comments: "TBD. If unavailable, Donald will provide" },
         { category: "Backline", item: "Mixer", details: "", owner: "Blizzard", shareable: "Yes", comments: "TBD. If unavailable, Donald will provide" },
@@ -395,11 +443,11 @@
     function setupCalendarLinks() {
         const title = "ABK Open Mic Night";
         const location = "The Nexus, 16215 Alton Pkwy, Irvine, CA 92618";
-        const details = "ABK Open Mic Night at The Nexus - Blizzard Irvine Campus Courtyard. Event: 5:00 PM - 8:00 PM. Rehearsals start at 3:00 PM.";
+        const details = "ABK Open Mic Night at The Nexus - Blizzard Irvine Campus Courtyard. Show: 6:00 PM - 7:40 PM. Setup starts at 1:00 PM. Practice starts at 3:00 PM.";
         const googleParams = new URLSearchParams({
             action: "TEMPLATE",
             text: title,
-            dates: "20260531T000000Z/20260531T030000Z",
+            dates: "20260531T010000Z/20260531T024000Z",
             details,
             location,
             ctz: "America/Los_Angeles"
@@ -415,11 +463,11 @@
             "BEGIN:VEVENT",
             "UID:abk-open-mic-20260530@abk-open-mic-page",
             "DTSTAMP:20260508T000000Z",
-            "DTSTART:20260531T000000Z",
-            "DTEND:20260531T030000Z",
+            "DTSTART:20260531T010000Z",
+            "DTEND:20260531T024000Z",
             "SUMMARY:ABK Open Mic Night",
             "LOCATION:The Nexus\\, 16215 Alton Pkwy\\, Irvine\\, CA 92618",
-            "DESCRIPTION:ABK Open Mic Night at The Nexus - Blizzard Irvine Campus Courtyard. Event: 5:00 PM - 8:00 PM. Rehearsals start at 3:00 PM.",
+            "DESCRIPTION:ABK Open Mic Night at The Nexus - Blizzard Irvine Campus Courtyard. Show: 6:00 PM - 7:40 PM. Setup starts at 1:00 PM. Practice starts at 3:00 PM.",
             "END:VEVENT",
             "END:VCALENDAR"
         ].join("\r\n");
@@ -539,6 +587,25 @@
                 <span class="text-[10px] font-black uppercase tracking-widest ${songReady(song) ? "text-green-400" : "text-orange-600"}">${songReady(song) ? "Ready" : "Open slot"}</span>
             </button>
         `).join("");
+    }
+
+    function renderShowTimetable() {
+        document.getElementById("show-timetable").innerHTML = showTimetable.map(item => {
+            const cls = item.type === "highlight" ? "schedule-row highlight" : item.type === "muted" ? "schedule-row muted" : "schedule-row";
+            const song = songs.find(candidate => candidate.title === item.activity);
+            const title = song
+                ? `<button class="font-extrabold hover:underline" onclick="switchPanel('songs', document.querySelector('[data-panel=songs]')); toggleSong(${songs.indexOf(song)});">${item.activity}</button>`
+                : `<span class="font-extrabold">${item.activity}</span>`;
+            return `
+                <tr class="${cls} border-b border-[#1f2937] last:border-0">
+                    <td class="px-5 py-3 font-black text-right tabular-nums">${item.start}</td>
+                    <td class="px-5 py-3">${title}</td>
+                    <td class="px-5 py-3">${item.artist || ""}</td>
+                    <td class="px-5 py-3 text-right tabular-nums">${item.mins}</td>
+                    <td class="px-5 py-3 text-right tabular-nums">${item.end}</td>
+                </tr>
+            `;
+        }).join("");
     }
 
     function renderRehearsalSchedule() {
@@ -665,6 +732,7 @@
     document.getElementById("status-filter").addEventListener("change", renderSongs);
 
     renderOverview();
+    renderShowTimetable();
     renderRehearsalSchedule();
     renderSongs();
     renderPeople();
