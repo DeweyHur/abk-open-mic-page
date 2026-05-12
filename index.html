@@ -158,14 +158,12 @@
                     <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Run of show</h2>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full min-w-[680px] text-left text-sm">
+                    <table class="w-full min-w-[480px] text-left text-sm">
                         <thead class="bg-[#020617] text-gray-400 text-[10px] font-black uppercase tracking-widest">
                             <tr>
                                 <th class="px-5 py-3">Start</th>
                                 <th class="px-5 py-3">Activity / Song</th>
                                 <th class="px-5 py-3">Original Artist</th>
-                                <th class="px-5 py-3 text-right">Mins</th>
-                                <th class="px-5 py-3 text-right">End</th>
                             </tr>
                         </thead>
                         <tbody id="show-timetable"></tbody>
@@ -582,7 +580,7 @@
                 <div class="w-12 h-9 rounded-xl flex items-center justify-center bg-[#1f2937] text-gray-300 font-black text-xs">${song.year}</div>
                 <div class="flex-grow min-w-0">
                     <p class="text-sm font-bold text-gray-100 truncate">${song.title}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">#{i + 1} · ${song.artist} · ${fmt(seconds(song))}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">#${i + 1} · ${song.artist} · ${fmt(seconds(song))}</p>
                 </div>
                 <span class="text-[10px] font-black uppercase tracking-widest ${songReady(song) ? "text-green-400" : "text-orange-600"}">${songReady(song) ? "Ready" : "Open slot"}</span>
             </button>
@@ -601,8 +599,6 @@
                     <td class="px-5 py-3 font-black text-right tabular-nums">${item.start}</td>
                     <td class="px-5 py-3">${title}</td>
                     <td class="px-5 py-3">${item.artist || ""}</td>
-                    <td class="px-5 py-3 text-right tabular-nums">${item.mins}</td>
-                    <td class="px-5 py-3 text-right tabular-nums">${item.end}</td>
                 </tr>
             `;
         }).join("");
