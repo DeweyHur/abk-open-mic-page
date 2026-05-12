@@ -80,6 +80,7 @@
             <button class="tab-btn active text-xs font-bold px-4 py-2 rounded-full" data-panel="overview" onclick="switchPanel('overview', this)">Overview</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="songs" onclick="switchPanel('songs', this)">Songs</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="people" onclick="switchPanel('people', this)">People</button>
+            <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="gear" onclick="switchPanel('gear', this)">Gear</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="resources" onclick="switchPanel('resources', this)">Resources</button>
         </div>
 
@@ -253,6 +254,15 @@
                 <div id="resource-list"></div>
             </div>
         </section>
+
+        <section id="panel-gear" class="panel space-y-4">
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Stage Inventory</p>
+                <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Gear and owners</h2>
+                <p class="text-sm text-gray-400 mt-2">Backline, microphones, amps, drums, instruments, and capture gear for the event.</p>
+            </div>
+            <div id="gear-list" class="space-y-4"></div>
+        </section>
     </main>
 
     <script>
@@ -275,6 +285,36 @@
         { title: "Last Nite", artist: "The Strokes", year: 2001, setOrder: 8, minutes: 3, seconds: 22, rehearsal: 0, practiceSlot: 12, practiceStage: "Main", link: "Last Nite - YouTube", videoId: "Bn-lcvrMOlc", parts: { Vocal: "Misti Lommen", Guitar: "Cedric Loehr", "Guitar 2": "Randal Droher", Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem" } }
     ];
     const setlistSongs = songs.slice().sort((a, b) => a.setOrder - b.setOrder);
+    const gear = [
+        { category: "Backline", item: "PA Loudspeakers", details: "Ingenia IG4TR x2 + Ingenia IGS1 x2", owner: "Blizzard", shareable: "Yes", comments: "TBD. If unavailable, Donald will provide" },
+        { category: "Backline", item: "Mixer", details: "", owner: "Blizzard", shareable: "Yes", comments: "TBD. If unavailable, Donald will provide" },
+        { category: "Backline", item: "Additional mixer", details: "Yamaha AG06 (2 mono, 2 stereo, 1 aux)", owner: "Randal", shareable: "Yes" },
+        { category: "Backline", item: "Monitor speaker", details: "Yamaha DXR15mkII (15 inch, 1100W)", owner: "Randal", shareable: "Yes" },
+        { category: "Backline", item: "Bluetooth TX/RX", details: "Bluetooth for background music", owner: "Donald", shareable: "Yes" },
+        { category: "Backline", item: "Cables", details: "Snake? Mains for sure.", owner: "Blizzard", shareable: "Yes" },
+        { category: "Backline", item: "Cables", details: "Mic, interconnect, etc.", owner: "Donald", shareable: "Yes" },
+        { category: "Backline", item: "DI Box", details: "Radial SB-2 (Mono, Passive)", owner: "Randal", shareable: "Yes" },
+        { category: "Backline", item: "DI Box", details: "Radial ProD2 (Stereo, Passive)", owner: "Randal", shareable: "Yes" },
+        { category: "Microphones", item: "Mix of vocal mics", details: "5-6 SM57 + SM58, others", owner: "Donald", shareable: "Yes" },
+        { category: "Microphones", item: "Mix of mic stands", details: "5-6 straight, boom, cab, etc.", owner: "Donald", shareable: "Yes" },
+        { category: "Microphones", item: "Mic stand", details: "Straight", owner: "Ockkyoung", shareable: "Yes" },
+        { category: "Amplifiers", item: "Bass amp", details: "Ampeg SVT4-pro (600w + 600w bi-amp)", owner: "Donald", shareable: "Yes" },
+        { category: "Amplifiers", item: "Bass cab", details: "Ampeg PF115HE + VB-210 stack", owner: "Donald", shareable: "Yes" },
+        { category: "Amplifiers", item: "Guitar amp 1", details: "Bugera 20W (baby tube amp) + instrument mic", owner: "Karn", shareable: "n/a", comments: "Only one input, will likely need to be mic'd into PA" },
+        { category: "Amplifiers", item: "Guitar amp 2", details: "<open>", owner: "", shareable: "" },
+        { category: "Drums", item: "Drum kit", details: "<open>", owner: "", shareable: "" },
+        { category: "Drums", item: "V-drums", details: "For alternate rehearsal space", owner: "Ockkyoung", shareable: "Yes" },
+        { category: "Instruments", item: "Bass guitar", details: "Ibanez fretless 5-string (Korn)", owner: "Donald", shareable: "Yes" },
+        { category: "Instruments", item: "Bass guitar", details: "(TBD) Something with frets for other songs", owner: "Donald", shareable: "Yes" },
+        { category: "Instruments", item: "Stage piano", details: "Roland Fantom 08 (88 weighted keys)", owner: "Randal", shareable: "Yes" },
+        { category: "Instruments", item: "Electric guitar", details: "Charvel 24-fret floating bridge SSH, 9-42 strings", owner: "Karn", shareable: "Yes" },
+        { category: "Other", item: "Photography", details: "Camera, etc.", owner: "Misti", shareable: "No" },
+        { category: "Other", item: "Video recording", details: "Osmo Pocket3, iPhone 16 Pro", owner: "Ockkyoung", shareable: "No" },
+        { category: "Other", item: "iPad Stand", details: "Stage", owner: "Randal", shareable: "Yes" },
+        { category: "Other", item: "iPad Stand", details: "", owner: "Ockkyoung", shareable: "Yes" },
+        { category: "Other", item: "iPad", details: "", owner: "Ockkyoung", shareable: "Yes" },
+        { category: "Other", item: "iPad", details: "", owner: "Donald", shareable: "No", comments: "Contingent on if I need to bring my mixer" }
+    ];
 
     function seconds(song) { return song.minutes * 60 + song.seconds; }
     function fmt(total) {
@@ -561,6 +601,48 @@
         `).join("");
     }
 
+    function gearStatus(item) {
+        if (item.details === "<open>") return ["Open", "text-orange-300 bg-orange-950/60 border-orange-800"];
+        if (item.comments?.includes("TBD")) return ["TBD", "text-yellow-300 bg-yellow-950/50 border-yellow-800"];
+        if (item.shareable === "No") return ["Private", "text-gray-300 bg-[#020617] border-[#263244]"];
+        if (item.shareable === "n/a") return ["n/a", "text-gray-400 bg-[#020617] border-[#263244]"];
+        return ["Shareable", "text-green-300 bg-green-950/50 border-green-800"];
+    }
+
+    function renderGear() {
+        const categories = [...new Set(gear.map(item => item.category))];
+        document.getElementById("gear-list").innerHTML = categories.map(category => {
+            const items = gear.filter(item => item.category === category);
+            return `
+            <section class="dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden">
+                <div class="px-6 py-4 border-b border-[#1f2937] flex items-center justify-between gap-3">
+                    <h3 class="text-base font-extrabold text-gray-100">${category}</h3>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">${items.length} items</span>
+                </div>
+                <div>
+                    ${items.map(item => {
+                        const [label, cls] = gearStatus(item);
+                        return `
+                        <div class="px-5 py-4 border-b border-[#1f2937] last:border-0">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <p class="text-sm font-extrabold text-gray-100">${item.item}</p>
+                                    <p class="text-xs text-gray-400 mt-0.5">${item.details || "Details TBD"}</p>
+                                </div>
+                                <span class="shrink-0 text-[10px] font-black uppercase tracking-widest border rounded-md px-2 py-1 ${cls}">${label}</span>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mt-3">
+                                <span class="role-pill filled text-[10px] font-bold px-2.5 py-1 rounded-md">Owner: ${item.owner || "open"}</span>
+                                ${item.shareable ? `<span class="role-pill text-[10px] font-bold px-2.5 py-1 rounded-md">Shareable: ${item.shareable}</span>` : ""}
+                            </div>
+                            ${item.comments ? `<p class="text-xs text-gray-400 mt-3">${item.comments}</p>` : ""}
+                        </div>`;
+                    }).join("")}
+                </div>
+            </section>`;
+        }).join("");
+    }
+
     function toggleSong(index) {
         const card = document.querySelector(`[data-song-index="${index}"]`);
         if (!card) return;
@@ -587,6 +669,7 @@
     renderSongs();
     renderPeople();
     renderResources();
+    renderGear();
     setupCalendarLinks();
     updateCountdown();
     setInterval(updateCountdown, 1000);
