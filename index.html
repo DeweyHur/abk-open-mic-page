@@ -42,7 +42,7 @@
     <nav class="bg-[#020617] text-white px-6 py-3 flex items-center gap-3 text-sm border-b border-[#1f2937]">
         <span class="font-black tracking-tight text-white text-base">ABK Open Mic</span>
         <span class="text-gray-500">|</span>
-        <span class="text-gray-400 text-xs">Setlist · Resources · Participants · Stats</span>
+        <span class="text-gray-400 text-xs">Setlist · Media · Resources · Participants</span>
     </nav>
 
     <header class="bg-gradient-to-b from-[#03140a] via-[#064e3b] to-[#111827] text-white pt-14 pb-24 px-6 text-center">
@@ -81,6 +81,8 @@
         <div class="tab-scroll flex gap-1.5 overflow-x-auto pb-1 mb-5">
             <button class="tab-btn active text-xs font-bold px-4 py-2 rounded-full" data-panel="overview" onclick="switchPanel('overview', this)">Overview</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="rehearsal" onclick="switchPanel('rehearsal', this)">Rehearsal</button>
+            <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="practice-room" onclick="switchPanel('practice-room', this)">Practice Room</button>
+            <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="show" onclick="switchPanel('show', this)">Show</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="songs" onclick="switchPanel('songs', this)">Songs</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="people" onclick="switchPanel('people', this)">People</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="gear" onclick="switchPanel('gear', this)">Gear</button>
@@ -235,6 +237,44 @@
             </div>
         </section>
 
+        <section id="panel-practice-room" class="panel space-y-4">
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Official Rehearsal</p>
+                <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Stage One Studios rehearsal interest</h2>
+                <p class="text-sm text-gray-400 mt-2">Want to get a group rehearsal in before the open mic? Fill out the interest form for ABK Open Mic rehearsal time at Stage One Studios.</p>
+                <div class="grid sm:grid-cols-[1fr_auto] gap-3 mt-4">
+                    <div class="dark-soft rounded-xl border border-[#1f2937] px-4 py-3">
+                        <p class="text-sm font-bold text-gray-100">Stage One Studios</p>
+                        <a class="text-xs text-green-400 mt-1 inline-flex items-center gap-1 hover:underline" href="https://stageonestudios.com/" target="_blank">
+                            stageonestudios.com
+                            <i class="fas fa-arrow-up-right-from-square text-[9px]"></i>
+                        </a>
+                        <p class="text-xs text-gray-400 mt-2">23092 Terra Dr.<br>Laguna Hills, CA 92653</p>
+                    </div>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfpavRiS9d3ecNxYDtxzv_UnRNQTk6XZgWVM27925l-yhlS4g/viewform" target="_blank"
+                       class="link-btn inline-flex items-center justify-center gap-2 rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-sm font-bold text-gray-100">
+                        <i class="fas fa-clipboard-list text-green-400 text-xs"></i>Interest Form
+                    </a>
+                </div>
+            </div>
+
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Practice Room</p>
+                <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Rehearsal clips</h2>
+                <p class="text-sm text-gray-400 mt-2">Upload more practice-room recordings to YouTube and post the link in <a class="text-green-400 font-bold hover:underline" href="https://abk-community.slack.com/archives/C091Y02RLJC/p1779321283081409" target="_blank">the Slack thread</a>.</p>
+            </div>
+            <div id="practice-room-media" class="space-y-4"></div>
+        </section>
+
+        <section id="panel-show" class="panel space-y-4">
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Show</p>
+                <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Performance clips</h2>
+                <p class="text-sm text-gray-400 mt-2">Upload more show videos to YouTube and post the link in <a class="text-green-400 font-bold hover:underline" href="https://abk-community.slack.com/archives/C091Y02RLJC/p1779321283081409" target="_blank">the Slack thread</a>. Phone footage, stage angle, crowd angle, and full-song captures are all useful.</p>
+            </div>
+            <div id="show-media" class="space-y-4"></div>
+        </section>
+
         <section id="panel-songs" class="panel space-y-4">
             <div class="dark-card rounded-2xl p-4 shadow-sm border border-[#1f2937]">
                 <div class="grid md:grid-cols-[1fr_auto_auto] gap-3">
@@ -330,6 +370,17 @@
         { start: "7:29", activity: "Reward the Scars", artist: "Korn", mins: 4, end: "7:35", type: "muted" },
         { start: "7:35", activity: "Closing", artist: "", mins: 5, end: "7:40", type: "highlight" },
         { start: "7:40", activity: "Tear Down", artist: "", mins: 90, end: "9:10", type: "muted" }
+    ];
+    const practiceRoomClips = [
+        { title: "Balatro", source: "YouTube", url: "https://www.youtube.com/watch?v=kb_lxlDpPBs", embed: "https://www.youtube-nocookie.com/embed/kb_lxlDpPBs" },
+        { title: "Balatro", source: "YouTube", url: "https://youtu.be/tDLoUXq7BR4", embed: "https://www.youtube-nocookie.com/embed/tDLoUXq7BR4" },
+        { title: "Overworld", source: "YouTube Shorts", url: "https://youtube.com/shorts/a0iLX57nNbU?si=0LtSJabxzATU8aS5", embed: "https://www.youtube-nocookie.com/embed/a0iLX57nNbU" },
+        { title: "Barracuda", source: "Streamable", url: "https://streamable.com/fh6d36", embed: "https://streamable.com/e/fh6d36" },
+        { title: "Barracuda", source: "YouTube", url: "https://www.youtube.com/watch?v=kSl8mr5WlMQ", embed: "https://www.youtube-nocookie.com/embed/kSl8mr5WlMQ" }
+    ];
+    const showClips = [
+        { title: "Barracuda", source: "Streamable", url: "https://streamable.com/fh6d36", embed: "https://streamable.com/e/fh6d36" },
+        { title: "Barracuda", source: "YouTube", url: "https://www.youtube.com/watch?v=kSl8mr5WlMQ", embed: "https://www.youtube-nocookie.com/embed/kSl8mr5WlMQ" }
     ];
     const gear = [
         { category: "Backline", item: "PA Loudspeakers", details: "Ingenia IG4TR x2 + Ingenia IGS1 x2", owner: "Blizzard", shareable: "Yes", comments: "TBD. If unavailable, Donald will provide" },
@@ -664,6 +715,37 @@
         `).join("");
     }
 
+    function renderMediaList(targetId, clips) {
+        const groups = clips.reduce((acc, clip) => {
+            acc[clip.title] ||= [];
+            acc[clip.title].push(clip);
+            return acc;
+        }, {});
+        document.getElementById(targetId).innerHTML = Object.entries(groups).map(([title, songClips]) => `
+            <section class="dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden">
+                <div class="px-6 py-5 border-b border-[#1f2937] flex items-center justify-between gap-3">
+                    <h3 class="text-lg font-extrabold text-gray-100">${title}</h3>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">${songClips.length} clip${songClips.length === 1 ? "" : "s"}</span>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4 p-5">
+                    ${songClips.map((clip, index) => `
+                        <article class="dark-soft rounded-xl border border-[#1f2937] overflow-hidden">
+                            <div class="video-frame overflow-hidden border-0">
+                                <iframe class="w-full h-full" src="${clip.embed}" title="${title} clip ${index + 1}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            </div>
+                            <div class="p-4 flex items-center justify-between gap-3">
+                                <p class="text-xs font-black uppercase tracking-widest text-gray-400">${clip.source}</p>
+                                <a class="link-btn rounded-lg bg-[#020617] border border-[#263244] px-3 py-2 text-xs font-bold text-gray-200" href="${clip.url}" target="_blank">
+                                    <i class="fas fa-arrow-up-right-from-square text-green-400 mr-1"></i>Open
+                                </a>
+                            </div>
+                        </article>
+                    `).join("")}
+                </div>
+            </section>
+        `).join("");
+    }
+
     function gearStatus(item) {
         if (item.details === "<open>") return ["Open", "text-orange-300 bg-orange-950/60 border-orange-800"];
         if (item.comments?.includes("TBD")) return ["TBD", "text-yellow-300 bg-yellow-950/50 border-yellow-800"];
@@ -733,6 +815,8 @@
     renderSongs();
     renderPeople();
     renderResources();
+    renderMediaList("practice-room-media", practiceRoomClips);
+    renderMediaList("show-media", showClips);
     renderGear();
     setupCalendarLinks();
     updateCountdown();
