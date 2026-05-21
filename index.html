@@ -612,9 +612,12 @@
         const selectedRole = roleFilter.value;
         const status = document.getElementById("status-filter").value;
         const filtered = setlistSongs.filter(song => {
-            const haystack = [song.title, song.artist, song.link, ...Object.values(song.parts).flat(), ...Object.values(song.extraParts || {}).flat()].join(" ").toLowerCase();
+            const roleValue = selectedRole === "all" ? "" : song.parts[selectedRole] || song.extraParts?.[selectedRole] || "";
+            const haystack = selectedRole === "all"
+                ? [song.title, song.artist, song.link, ...Object.values(song.parts).flat(), ...Object.values(song.extraParts || {}).flat()].join(" ").toLowerCase()
+                : partList(roleValue).join(" ").toLowerCase();
             const matchesQuery = !query || haystack.includes(query);
-            const matchesRole = selectedRole === "all" || Boolean(song.parts[selectedRole] || song.extraParts?.[selectedRole]);
+            const matchesRole = selectedRole === "all" || Boolean(roleValue);
             const matchesStatus = status === "all" || (status === "needs" ? !songReady(song) : songReady(song));
             return matchesQuery && matchesRole && matchesStatus;
         });
