@@ -274,6 +274,21 @@
                 <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Rehearsal clips</h2>
                 <p class="text-sm text-gray-400 mt-2">Upload more practice-room recordings to YouTube and post the link in <a class="text-green-400 font-bold hover:underline" href="https://abk-community.slack.com/archives/C091Y02RLJC/p1779321283081409" target="_blank">the Slack thread</a>.</p>
             </div>
+            <div class="dark-card rounded-2xl shadow-sm border border-[#1f2937] overflow-hidden">
+                <div class="px-6 py-5 border-b border-[#1f2937] flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Upcoming Rehearsals</p>
+                        <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Who's In</h2>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400" id="rehearsal-attendance-summary"></span>
+                </div>
+                <div class="px-5 pt-4 pb-1 flex gap-1.5">
+                    <button id="atv-btn-attendees" onclick="setAttendanceView('attendees')" class="text-[10px] font-black px-3 py-1.5 rounded-lg bg-green-500 text-white">Attendees</button>
+                    <button id="atv-btn-byday" onclick="setAttendanceView('byday')" class="text-[10px] font-black px-3 py-1.5 rounded-lg bg-[#1f2937] text-gray-400 border border-[#263244]">By Day</button>
+                </div>
+                <div class="px-5 py-4 space-y-2" id="attendance-view-attendees"></div>
+                <div class="hidden" id="attendance-view-byday"></div>
+            </div>
             <div id="practice-room-media" class="space-y-4"></div>
         </section>
 
@@ -350,6 +365,11 @@
         { title: "Last Nite", artist: "The Strokes", year: 2001, setOrder: 8, minutes: 3, seconds: 22, rehearsal: 0, practiceSlot: 12, practiceStage: "Main", link: "Last Nite - YouTube", videoId: "Bn-lcvrMOlc", parts: { Vocal: "mistimlommen@gmail.com", Guitar: "Cedric Loehr", "Guitar 2": "Randal Droher", Bass: "Donald Lawrenz III", Drum: "Ockkyoung Leem", Mixing: "Dewey Hur" } }
     ];
     const setlistSongs = songs.slice().sort((a, b) => a.setOrder - b.setOrder);
+    const rehearsalSessions = [
+        { date: "May 23", attendees: ["Trevor Huwe", "Randal Droher", "Kristine Kirchhoff Ashman", "Donald Lawrenz III", "Kristina Wong", "Chris Dietsch", "Erin McElroy"] },
+        { date: "May 29", attendees: ["Dewey Hur", "Kristina Wong", "Ockkyoung Leem", "Kristine Kirchhoff Ashman", "Nathan Bonfiglio"] }
+    ];
+    const rehearsalCost = { total: 253.38, venmo: "kadd3rin" };
     const showTimetable = [
         { start: "1:00", activity: "Setup", artist: "", mins: 120, end: "3:00", type: "muted" },
         { start: "3:00", activity: "Practice", artist: "", mins: 180, end: "6:00", type: "highlight" },
@@ -607,6 +627,130 @@
         </article>`;
     }
 
+    function setAttendanceView(view) {
+        ['attendees', 'byday'].forEach(v => {
+            document.getElementById(`attendance-view-${v}`).classList.toggle('hidden', v !== view);
+            const btn = document.getElementById(`atv-btn-${v}`);
+            btn.className = v === view
+                ? 'text-[10px] font-black px-3 py-1.5 rounded-lg bg-green-500 text-white'
+                : 'text-[10px] font-black px-3 py-1.5 rounded-lg bg-[#1f2937] text-gray-400 border border-[#263244]';
+        });
+    }
+
+    function renderRehearsalAttendance() {
+        const totalSessions = rehearsalSessions.length;
+        const allAttendees = {};
+        rehearsalSessions.forEach(session => {
+            session.attendees.forEach(name => {
+                allAttendees[name] ||= [];
+                allAttendees[name].push(session.date);
+            });
+        });
+        const sorted = Object.entries(allAttendees).sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+        const allDaysCount = sorted.filter(([, sessions]) => sessions.length === totalSessions).length;
+        document.getElementById("rehearsal-attendance-summary").textContent =
+            `${sorted.length} attendees · ${allDaysCount} all-days pass`;
+
+        // Cost card
+        const perPerson = (Math.ceil(rehearsalCost.total / sorted.length * 100) / 100).toFixed(2);
+        const venmoUrl = `venmo://paycharge?txn=pay&recipients=${rehearsalCost.venmo}&amount=${perPerson}&note=ABK+Practice+Room`;
+        const costCard = `
+        <div class="rounded-xl border border-[#263244] bg-[#020617] overflow-hidden mb-2">
+            <div class="flex gap-4 p-4">
+                <a href="${venmoUrl}" target="_blank" class="flex-shrink-0">
+                    <img src="static/2026%20May/PracticeVenmo.jpg" alt="Venmo QR code" class="w-24 h-24 rounded-lg object-contain bg-white">
+                </a>
+                <div class="flex-grow min-w-0">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Practice Room Cost</p>
+                    <p class="text-2xl font-black text-gray-100">\$${perPerson} <span class="text-sm font-bold text-gray-400">/ person</span></p>
+                    <p class="text-xs text-gray-500 mt-0.5">\$${rehearsalCost.total.toFixed(2)} total &middot; ${sorted.length} people</p>
+                    <a href="${venmoUrl}" class="inline-flex items-center gap-1.5 mt-2 text-sm font-black text-[#008cff] hover:opacity-80">
+                        <i class="fab fa-venmo"></i>@${rehearsalCost.venmo}
+                    </a>
+                </div>
+            </div>
+            <div class="px-4 py-2.5 border-t border-[#1f2937] text-xs text-gray-400">
+                One payment covers both slots &mdash; visit any time on <span class="text-gray-200 font-bold">May 23</span> and/or <span class="text-gray-200 font-bold">May 29</span>.
+            </div>
+        </div>`;
+
+        // Attendees view
+        document.getElementById("attendance-view-attendees").innerHTML = costCard + sorted.map(([name, sessions]) => {
+            const isAllDays = sessions.length === totalSessions;
+            const sessionTags = rehearsalSessions.map(s => {
+                const attending = sessions.includes(s.date);
+                return `<span class="text-[10px] font-black px-2 py-0.5 rounded-md ${attending
+                    ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                    : "bg-[#1f2937] text-gray-600 border border-[#263244]"}">${s.date}</span>`;
+            }).join("");
+            return `
+            <div class="flex items-center justify-between gap-3 rounded-xl dark-soft border border-[#1f2937] px-4 py-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-lg ${isAllDays ? "bg-green-500 text-white" : "bg-[#1f2937] text-gray-400"} flex items-center justify-center text-[10px] font-black">${initials(name)}</div>
+                    <div class="min-w-0">
+                        <span class="text-sm font-extrabold text-gray-100 truncate block">${name}</span>
+                        ${isAllDays ? `<span class="text-[10px] font-black text-green-400 uppercase tracking-wider">All-Days Pass</span>` : `<span class="text-[10px] text-gray-500">${sessions.join(", ")} only &mdash; join the other slot!</span>`}
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                    ${sessionTags}
+                    <span class="text-[10px] font-black text-gray-500 ml-1">${sessions.length}/${totalSessions}</span>
+                </div>
+            </div>`;
+        }).join("");
+
+        // By Day view
+        document.getElementById("attendance-view-byday").innerHTML = rehearsalSessions.map(session => {
+            const attendeeSet = new Set(session.attendees);
+            const songCoverage = songs.map(song => {
+                const assignedRoles = [...roles, ...Object.keys(song.extraParts || {})].filter(role => {
+                    if (role === "Mixing") return false;
+                    const v = song.parts[role] ?? song.extraParts?.[role];
+                    return v && !isOpen(v);
+                });
+                const coveredRoles = assignedRoles.filter(role => {
+                    const v = song.parts[role] ?? song.extraParts?.[role];
+                    return partList(v).some(p => attendeeSet.has(p));
+                });
+                return { song, assignedRoles, coveredRoles };
+            }).filter(c => c.coveredRoles.length >= 2)
+              .sort((a, b) =>
+                (b.coveredRoles.length / b.assignedRoles.length) - (a.coveredRoles.length / a.assignedRoles.length)
+                || b.coveredRoles.length - a.coveredRoles.length
+              );
+
+            return `
+            <div class="border-b border-[#1f2937] last:border-0">
+                <div class="px-5 py-3 bg-[#020617] flex items-center justify-between">
+                    <span class="text-xs font-black text-green-400 uppercase tracking-widest">${session.date}</span>
+                    <span class="text-[10px] text-gray-500">${session.attendees.length} attending · ${songCoverage.length} songs reachable</span>
+                </div>
+                ${songCoverage.map(c => {
+                    const full = c.coveredRoles.length === c.assignedRoles.length;
+                    const coveredSet = new Set(c.coveredRoles);
+                    return `
+                    <div class="px-5 py-3 border-b border-[#1f2937] last:border-0">
+                        <div class="flex items-center justify-between gap-3 mb-2">
+                            <div class="min-w-0">
+                                <span class="text-sm font-extrabold text-gray-100">${c.song.title}</span>
+                                <span class="text-xs text-gray-500 ml-2">${c.song.artist}</span>
+                            </div>
+                            <span class="text-[10px] font-black flex-shrink-0 ${full ? 'text-green-400' : 'text-yellow-500'}">${c.coveredRoles.length}/${c.assignedRoles.length} parts</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1">
+                            ${c.assignedRoles.map(role => {
+                                const v = c.song.parts[role] ?? c.song.extraParts?.[role];
+                                const pname = partList(v)[0];
+                                const present = coveredSet.has(role);
+                                return `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${present ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-[#1f2937] text-gray-600 border border-[#263244]'}">${role}: ${pname}</span>`;
+                            }).join('')}
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>`;
+        }).join("");
+    }
+
     function renderSongs() {
         const query = document.getElementById("search-input").value.toLowerCase().trim();
         const selectedRole = roleFilter.value;
@@ -811,6 +955,7 @@
     document.getElementById("status-filter").addEventListener("change", renderSongs);
 
     renderOverview();
+    renderRehearsalAttendance();
     renderShowTimetable();
     renderRehearsalSchedule();
     renderSongs();
