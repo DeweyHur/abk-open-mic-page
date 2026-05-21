@@ -289,6 +289,26 @@
                 <div class="px-5 py-4 space-y-2" id="attendance-view-attendees"></div>
                 <div class="hidden" id="attendance-view-byday"></div>
             </div>
+
+            <div class="dark-card rounded-2xl p-5 shadow-sm border border-[#1f2937]">
+                <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-3">Coordination Notes</p>
+                <div class="flex gap-3 items-start">
+                    <div class="w-8 h-8 rounded-lg bg-[#1f2937] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i class="fas fa-bluetooth text-blue-400 text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-extrabold text-gray-100">BT TX/RX — Backing Tracks</p>
+                        <p class="text-xs text-gray-400 mt-1 leading-5">
+                            <span class="text-gray-200 font-bold">Donald Lawrenz III</span> will bring his Bluetooth TX/RX on
+                            <span class="text-gray-200 font-bold">May 23</span> (can plug into anything for backing tracks).
+                            After that session, he'll pass it to
+                            <span class="text-gray-200 font-bold">Kristine Kirchhoff Ashman</span> to have for
+                            <span class="text-gray-200 font-bold">May 29</span>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <div id="practice-room-media" class="space-y-4"></div>
         </section>
 
@@ -647,7 +667,7 @@
             });
         });
         const sorted = Object.entries(allAttendees).sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
-        const allDaysCount = sorted.filter(([, sessions]) => sessions.length === totalSessions).length;
+        const allDaysCount = sorted.length;
         document.getElementById("rehearsal-attendance-summary").textContent =
             `${sorted.length} attendees · ${allDaysCount} all-days pass`;
 
@@ -676,7 +696,7 @@
 
         // Attendees view
         document.getElementById("attendance-view-attendees").innerHTML = costCard + sorted.map(([name, sessions]) => {
-            const isAllDays = sessions.length === totalSessions;
+            const isAllDays = true;
             const sessionTags = rehearsalSessions.map(s => {
                 const attending = sessions.includes(s.date);
                 return `<span class="text-[10px] font-black px-2 py-0.5 rounded-md ${attending
@@ -948,7 +968,16 @@
             btn.classList.add("active");
             btn.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
         }
+        history.replaceState(null, "", `#${id}`);
     }
+
+    function activatePanelFromHash() {
+        const hash = window.location.hash.slice(1);
+        const btn = document.querySelector(`[data-panel="${hash}"]`);
+        if (btn) switchPanel(hash, btn);
+    }
+
+    window.addEventListener("hashchange", activatePanelFromHash);
 
     document.getElementById("search-input").addEventListener("input", renderSongs);
     roleFilter.addEventListener("change", renderSongs);
@@ -966,6 +995,7 @@
     setupCalendarLinks();
     updateCountdown();
     setInterval(updateCountdown, 1000);
+    activatePanelFromHash();
     </script>
 </body>
 </html>
