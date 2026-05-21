@@ -82,7 +82,6 @@
             <button class="tab-btn active text-xs font-bold px-4 py-2 rounded-full" data-panel="overview" onclick="switchPanel('overview', this)">Overview</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="rehearsal" onclick="switchPanel('rehearsal', this)">Rehearsal</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="practice-room" onclick="switchPanel('practice-room', this)">Practice Room</button>
-            <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="show" onclick="switchPanel('show', this)">Show</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="songs" onclick="switchPanel('songs', this)">Songs</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="people" onclick="switchPanel('people', this)">People</button>
             <button class="tab-btn text-xs font-bold px-4 py-2 rounded-full" data-panel="gear" onclick="switchPanel('gear', this)">Gear</button>
@@ -151,6 +150,18 @@
                         <p class="text-2xl font-black text-green-400" id="count-seconds">--</p>
                         <p class="text-[10px] font-black uppercase tracking-widest text-gray-500">Sec</p>
                     </div>
+                </div>
+            </div>
+
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Coordination Policy</p>
+                <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Music here, operations in admin</h2>
+                <p class="text-sm text-gray-400 mt-2">Keep the main open-mic channel focused on songs, performance ideas, and general music discussion. For venue logistics, rehearsal planning, gear, setup, volunteer coordination, hosting, or support questions, use the admin/support channel. If you want to help with any part of the event, feel free to take initiative and drive it.</p>
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <a class="link-btn inline-flex items-center gap-2 rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-sm font-bold text-gray-100" href="https://abk.enterprise.slack.com/archives/C0B54T7BPSN" target="_blank">
+                        <i class="fab fa-slack text-green-400 text-xs"></i>Open admin/support channel
+                    </a>
+                    <span class="inline-flex items-center rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-xs font-bold text-gray-400">Open participation · transparent coordination</span>
                 </div>
             </div>
 
@@ -266,15 +277,6 @@
             <div id="practice-room-media" class="space-y-4"></div>
         </section>
 
-        <section id="panel-show" class="panel space-y-4">
-            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
-                <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Show</p>
-                <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Performance clips</h2>
-                <p class="text-sm text-gray-400 mt-2">Upload more show videos to YouTube and post the link in <a class="text-green-400 font-bold hover:underline" href="https://abk-community.slack.com/archives/C091Y02RLJC/p1779321283081409" target="_blank">the Slack thread</a>. Phone footage, stage angle, crowd angle, and full-song captures are all useful.</p>
-            </div>
-            <div id="show-media" class="space-y-4"></div>
-        </section>
-
         <section id="panel-songs" class="panel space-y-4">
             <div class="dark-card rounded-2xl p-4 shadow-sm border border-[#1f2937]">
                 <div class="grid md:grid-cols-[1fr_auto_auto] gap-3">
@@ -377,10 +379,6 @@
         { title: "Barracuda", source: "YouTube", url: "https://www.youtube.com/watch?v=kSl8mr5WlMQ", embed: "https://www.youtube-nocookie.com/embed/kSl8mr5WlMQ" },
         { title: "Give It All", source: "YouTube", url: "https://www.youtube.com/watch?v=a8lSEJgN2Wk", embed: "https://www.youtube-nocookie.com/embed/a8lSEJgN2Wk" },
         { title: "Give It All", source: "YouTube", url: "https://youtu.be/Fm-5Dq5lUB0?si=Xk0N-_wxsDorFsu7", embed: "https://www.youtube-nocookie.com/embed/Fm-5Dq5lUB0" }
-    ];
-    const showClips = [
-        { title: "Barracuda", source: "Streamable", url: "https://streamable.com/fh6d36", embed: "https://streamable.com/e/fh6d36" },
-        { title: "Barracuda", source: "YouTube", url: "https://www.youtube.com/watch?v=kSl8mr5WlMQ", embed: "https://www.youtube-nocookie.com/embed/kSl8mr5WlMQ" }
     ];
     const gear = [
         { category: "Backline", item: "PA Loudspeakers", details: "Ingenia IG4TR x2 + Ingenia IGS1 x2", owner: "Blizzard", shareable: "Yes", comments: "TBD. If unavailable, Donald will provide" },
@@ -816,7 +814,6 @@
     renderPeople();
     renderResources();
     renderMediaList("practice-room-media", practiceRoomClips);
-    renderMediaList("show-media", showClips);
     renderGear();
     setupCalendarLinks();
     updateCountdown();
