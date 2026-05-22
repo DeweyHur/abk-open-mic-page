@@ -267,6 +267,29 @@
                         <i class="fas fa-clipboard-list text-green-400 text-xs"></i>Interest Form
                     </a>
                 </div>
+                <div class="mt-4 border-t border-[#1f2937] pt-4 space-y-2">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Add to Calendar</p>
+                    <div class="flex items-center gap-2">
+                        <div class="min-w-0">
+                            <span class="text-xs font-black text-gray-200">May 23</span>
+                            <span class="text-xs text-gray-500 ml-2">5:00 – 8:00 PM</span>
+                        </div>
+                        <div class="flex gap-1.5 ml-auto flex-shrink-0">
+                            <a id="gcal-may23" target="_blank" class="link-btn inline-flex items-center gap-1.5 rounded-lg dark-soft border border-[#1f2937] px-3 py-1.5 text-xs font-bold text-gray-100"><i class="fas fa-calendar-plus text-green-400 text-[10px]"></i>Google</a>
+                            <a id="ics-may23" download="abk-practice-may23.ics" class="link-btn inline-flex items-center gap-1.5 rounded-lg dark-soft border border-[#1f2937] px-3 py-1.5 text-xs font-bold text-gray-100"><i class="fas fa-download text-green-400 text-[10px]"></i>ICS</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="min-w-0">
+                            <span class="text-xs font-black text-gray-200">May 29</span>
+                            <span class="text-xs text-gray-500 ml-2">8:00 – 11:00 PM</span>
+                        </div>
+                        <div class="flex gap-1.5 ml-auto flex-shrink-0">
+                            <a id="gcal-may29" target="_blank" class="link-btn inline-flex items-center gap-1.5 rounded-lg dark-soft border border-[#1f2937] px-3 py-1.5 text-xs font-bold text-gray-100"><i class="fas fa-calendar-plus text-green-400 text-[10px]"></i>Google</a>
+                            <a id="ics-may29" download="abk-practice-may29.ics" class="link-btn inline-flex items-center gap-1.5 rounded-lg dark-soft border border-[#1f2937] px-3 py-1.5 text-xs font-bold text-gray-100"><i class="fas fa-download text-green-400 text-[10px]"></i>ICS</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
@@ -527,6 +550,35 @@
         document.getElementById("count-minutes").textContent = String(minutes).padStart(2, "0");
         document.getElementById("count-seconds").textContent = String(secondsLeft).padStart(2, "0");
     }
+    function setupPracticeCalendarLinks() {
+        const loc = "Stage One Studios, 23092 Terra Dr., Laguna Hills, CA 92653";
+        const sessions = [
+            { id: "may23", dtStart: "20260524T000000Z", dtEnd: "20260524T030000Z" },
+            { id: "may29", dtStart: "20260530T030000Z", dtEnd: "20260530T060000Z" }
+        ];
+        sessions.forEach(s => {
+            const gParams = new URLSearchParams({
+                action: "TEMPLATE",
+                text: "ABK Open Mic Practice",
+                dates: `${s.dtStart}/${s.dtEnd}`,
+                location: loc,
+                ctz: "America/Los_Angeles"
+            });
+            document.getElementById(`gcal-${s.id}`).href = `https://calendar.google.com/calendar/render?${gParams.toString()}`;
+            const ics = [
+                "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ABK Open Mic//Practice//EN",
+                "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "BEGIN:VEVENT",
+                `UID:abk-practice-${s.id}@abk-open-mic-page`,
+                "DTSTAMP:20260521T000000Z",
+                `DTSTART:${s.dtStart}`, `DTEND:${s.dtEnd}`,
+                "SUMMARY:ABK Open Mic Practice",
+                `LOCATION:${loc.replace(/,/g, "\\,")}`,
+                "END:VEVENT", "END:VCALENDAR"
+            ].join("\r\n");
+            document.getElementById(`ics-${s.id}`).href = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+        });
+    }
+
     function setupCalendarLinks() {
         const title = "ABK Open Mic Night";
         const location = "The Nexus, 16215 Alton Pkwy, Irvine, CA 92618";
@@ -993,6 +1045,7 @@
     renderMediaList("practice-room-media", practiceRoomClips);
     renderGear();
     setupCalendarLinks();
+    setupPracticeCalendarLinks();
     updateCountdown();
     setInterval(updateCountdown, 1000);
     activatePanelFromHash();
