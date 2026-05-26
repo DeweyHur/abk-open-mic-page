@@ -50,7 +50,7 @@
             OPEN MIC SYSTEM · 14 SONGS
         </span>
         <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mt-1">Open Mic Through the Years</h1>
-        <p class="text-green-200 mt-3 text-sm font-medium opacity-90">Saturday, May 30 · 6:00 PM - 7:40 PM · Blizzard Irvine Campus Courtyard</p>
+        <p class="text-green-200 mt-3 text-sm font-medium opacity-90">Saturday, May 30 · 6:00 PM - 7:40 PM · Blizzard Theater · Building 1</p>
         <p class="max-w-2xl mx-auto text-green-100/90 mt-3 text-sm leading-6">A play-order timeline that moves from early rock roots into the mid-90s, then forward through 2026.</p>
         <button onclick="switchPanel('songs', document.querySelector('[data-panel=songs]'))"
                 class="inline-flex items-center gap-2 mt-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white text-xs font-bold px-5 py-2 rounded-full transition-all">
@@ -90,7 +90,7 @@
 
         <section id="panel-overview" class="panel active space-y-4">
             <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
-                <img src="static/venue.jpg" alt="The Nexus venue at Blizzard Irvine Campus Courtyard" class="venue-image w-full rounded-xl border border-[#263244] mb-5">
+                <img src="static/theater.jpg" alt="Blizzard Theater (Building 1) at Blizzard Irvine Campus" class="venue-image w-full rounded-xl border border-[#263244] mb-5">
                 <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
                     <div>
                         <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-2">Event Details</p>
@@ -103,7 +103,8 @@
                             </div>
                             <div class="dark-soft rounded-xl border border-[#1f2937] px-4 py-3">
                                 <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Location</p>
-                                <p class="text-sm font-bold text-gray-100">The Nexus</p>
+                                <p class="text-sm font-bold text-gray-100">Blizzard Theater</p>
+                                <p class="text-xs text-gray-400">Building 1</p>
                                 <a class="text-xs text-green-400 mt-0.5 inline-flex items-center gap-1 hover:underline" href="https://www.google.com/maps/search/?api=1&query=16215%20Alton%20Pkwy%2C%20Irvine%2C%20CA%2092618" target="_blank">
                                     16215 Alton Pkwy, Irvine, CA 92618
                                     <i class="fas fa-arrow-up-right-from-square text-[9px]"></i>
@@ -150,6 +151,18 @@
                         <p class="text-2xl font-black text-green-400" id="count-seconds">--</p>
                         <p class="text-[10px] font-black uppercase tracking-widest text-gray-500">Sec</p>
                     </div>
+                </div>
+            </div>
+
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#f59e0b]/30 bg-amber-950/20">
+                <p class="text-[10px] font-black uppercase tracking-widest text-amber-400 mb-1">Non-Blizzard Guests</p>
+                <h2 class="text-base font-extrabold text-gray-100 tracking-tight">Bringing someone from outside Blizzard?</h2>
+                <p class="text-sm text-gray-400 mt-2">This includes people from different studios (non-Blizzard). Please comment in the thread below with their <span class="text-gray-200 font-bold">name and email</span> so they can be added to the visitor list.</p>
+                <div class="mt-3">
+                    <a href="https://abk-community.slack.com/archives/C0B54T7BPSN/p1779473844640639" target="_blank"
+                       class="link-btn inline-flex items-center gap-2 rounded-xl dark-soft border border-[#1f2937] px-4 py-3 text-sm font-bold text-gray-100">
+                        <i class="fab fa-slack text-amber-400 text-xs"></i>Comment in thread with name &amp; email
+                    </a>
                 </div>
             </div>
 
@@ -581,8 +594,8 @@
 
     function setupCalendarLinks() {
         const title = "ABK Open Mic Night";
-        const location = "The Nexus, 16215 Alton Pkwy, Irvine, CA 92618";
-        const details = "ABK Open Mic Night at The Nexus - Blizzard Irvine Campus Courtyard. Show: 6:00 PM - 7:40 PM. Setup starts at 1:00 PM. Practice starts at 3:00 PM.";
+        const location = "Blizzard Theater (Building 1), 16215 Alton Pkwy, Irvine, CA 92618";
+        const details = "ABK Open Mic Night at Blizzard Theater (Building 1) - 16215 Alton Pkwy, Irvine, CA 92618. Show: 6:00 PM - 7:40 PM. Setup starts at 1:00 PM. Practice starts at 3:00 PM.";
         const googleParams = new URLSearchParams({
             action: "TEMPLATE",
             text: title,
@@ -605,8 +618,8 @@
             "DTSTART:20260531T010000Z",
             "DTEND:20260531T024000Z",
             "SUMMARY:ABK Open Mic Night",
-            "LOCATION:The Nexus\\, 16215 Alton Pkwy\\, Irvine\\, CA 92618",
-            "DESCRIPTION:ABK Open Mic Night at The Nexus - Blizzard Irvine Campus Courtyard. Show: 6:00 PM - 7:40 PM. Setup starts at 1:00 PM. Practice starts at 3:00 PM.",
+            "LOCATION:Blizzard Theater (Building 1)\\, 16215 Alton Pkwy\\, Irvine\\, CA 92618",
+            "DESCRIPTION:ABK Open Mic Night at Blizzard Theater (Building 1) - 16215 Alton Pkwy\\, Irvine\\, CA 92618. Show: 6:00 PM - 7:40 PM. Setup starts at 1:00 PM. Practice starts at 3:00 PM.",
             "END:VEVENT",
             "END:VCALENDAR"
         ].join("\r\n");
