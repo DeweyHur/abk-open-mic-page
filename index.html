@@ -245,6 +245,11 @@
                 <div class="px-6 py-5 border-b border-[#1f2937]">
                     <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Rehearsal Plan</p>
                     <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Single-room practice schedule</h2>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-gray-300 bg-[#1f2937] border border-[#263244] px-2.5 py-1 rounded-full"><i class="fas fa-users text-green-400 text-[9px]"></i>More people first</span>
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-gray-300 bg-[#1f2937] border border-[#263244] px-2.5 py-1 rounded-full"><i class="fas fa-arrows-rotate text-green-400 text-[9px]"></i>Minimize role switches</span>
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-gray-300 bg-[#1f2937] border border-[#263244] px-2.5 py-1 rounded-full"><i class="fas fa-clock text-amber-400 text-[9px]"></i>Nico Havin after 4:30 PM</span>
+                    </div>
                 </div>
                 <div id="rehearsal-schedule"></div>
             </div>
@@ -903,22 +908,57 @@
     }
 
     function renderRehearsalSchedule() {
-        document.getElementById("rehearsal-schedule").innerHTML = rehearsalWindows().map(item => `
+        const windows = rehearsalWindows();
+        function songPeople(song) {
+            const set = new Set();
+            roles.forEach(role => {
+                const v = song.parts[role];
+                if (v && !isOpen(v)) partList(v).forEach(p => set.add(p));
+            });
+            return set.size;
+        }
+        function getContinuations(a, b) {
+            return roles.filter(role => {
+                const pA = a.parts[role], pB = b.parts[role];
+                if (!pA || !pB || isOpen(pA) || isOpen(pB)) return false;
+                return partList(pA).some(p => partList(pB).includes(p));
+            });
+        }
+        document.getElementById("rehearsal-schedule").innerHTML = windows.map((item, i) => {
+            const pCount = songPeople(item);
+            const isNicoSong = item.parts.Vocal === "Nico Havin";
+            let connector = "";
+            if (i > 0) {
+                const cont = getContinuations(windows[i - 1], item);
+                if (cont.length > 0) {
+                    connector = `<div class="px-5 py-1.5 flex items-center gap-2 bg-green-950/30 border-b border-[#1f2937]">
+                        <i class="fas fa-arrow-down text-green-700 text-[8px] flex-shrink-0"></i>
+                        <div class="flex flex-wrap gap-1">${cont.map(r => `<span class="text-[9px] font-bold text-green-400 bg-green-900/40 px-1.5 py-0.5 rounded">${r}</span>`).join("")}</div>
+                        <span class="text-[9px] text-gray-600 ml-auto">${cont.length} role${cont.length > 1 ? "s" : ""} stay</span>
+                    </div>`;
+                } else {
+                    connector = `<div class="px-5 py-1.5 flex items-center gap-1.5 border-b border-[#1f2937]">
+                        <i class="fas fa-arrow-down text-gray-700 text-[8px]"></i>
+                        <span class="text-[9px] text-gray-700">full swap</span>
+                    </div>`;
+                }
+            }
+            return connector + `
             <div class="grid grid-cols-[92px_1fr_auto] sm:grid-cols-[140px_1fr_auto] gap-3 items-center px-5 py-4 border-b border-[#1f2937] last:border-0">
                 <div>
                     <p class="text-xs font-black text-gray-100">${timeLabel(item.start)}</p>
                     <p class="text-[10px] font-bold text-gray-500">${timeLabel(item.end)}</p>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-sm font-extrabold text-gray-100 truncate">${item.title}</p>
+                    <p class="text-sm font-extrabold text-gray-100 truncate">${item.title}${isNicoSong ? " <span class='text-amber-400 text-[10px] font-bold'>★ Nico</span>" : ""}</p>
                     <p class="text-xs text-gray-400 truncate">${item.artist}</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-green-400">${item.stage}</p>
+                    <p class="text-[10px] font-black text-blue-400">${pCount} people</p>
                     <p class="text-[10px] font-bold text-gray-500">Slot ${item.practiceSlot} · ${item.rehearsal} min</p>
                 </div>
-            </div>
-        `).join("");
+            </div>`;
+        }).join("");
     }
 
     function renderPeople() {
