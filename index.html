@@ -254,6 +254,19 @@
                 <div id="rehearsal-schedule"></div>
             </div>
 
+            <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
+                <p class="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">Session Lookup</p>
+                <h2 class="text-xl font-extrabold text-gray-100 tracking-tight">Find Your Schedule</h2>
+                <p class="text-sm text-gray-400 mt-2">Type your name to see which sessions you're registered for and when to arrive.</p>
+                <div class="mt-4">
+                    <label class="relative block">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input id="session-search" class="w-full dark-soft border border-[#263244] rounded-xl pl-9 pr-3 py-2.5 text-sm text-gray-100 outline-none focus:border-green-400" placeholder="Search by name…">
+                    </label>
+                </div>
+                <div id="session-search-results" class="mt-4 space-y-2"></div>
+            </div>
+
             <div class="grid md:grid-cols-2 gap-4">
                 <div class="dark-card rounded-2xl p-6 shadow-sm border border-[#1f2937]">
                     <h2 class="text-base font-extrabold text-gray-100 mb-4">Role Demand</h2>
@@ -428,8 +441,8 @@
     ];
     const setlistSongs = songs.slice().sort((a, b) => a.setOrder - b.setOrder);
     const rehearsalSessions = [
-        { date: "May 23", attendees: ["Trevor Huwe", "Randal Droher", "Kristine Kirchhoff Ashman", "Donald Lawrenz III", "Kristina Wong", "Erin McElroy", "Katherine Lopez"] },
-        { date: "May 29", attendees: ["Dewey Hur", "Kristina Wong", "Ockkyoung Leem", "Kristine Kirchhoff Ashman", "Nathan Bonfiglio", "Chris Dietsch", "Donald Lawrenz III", "Trevor Huwe"] }
+        { date: "May 23", time: "5:00 – 8:00 PM", attendees: ["Trevor Huwe", "Randal Droher", "Kristine Kirchhoff Ashman", "Donald Lawrenz III", "Kristina Wong", "Erin McElroy", "Katherine Lopez"] },
+        { date: "May 29", time: "8:00 – 11:00 PM", attendees: ["Dewey Hur", "Kristina Wong", "Ockkyoung Leem", "Kristine Kirchhoff Ashman", "Nathan Bonfiglio", "Chris Dietsch", "Donald Lawrenz III", "Trevor Huwe", "Randal Droher"] }
     ];
     const rehearsalCost = { total: 253.38, venmo: "kadd3rin" };
     const showTimetable = [
@@ -1093,6 +1106,56 @@
         }).join("");
     }
 
+    function renderSessionSearch() {
+        const query = document.getElementById("session-search").value.toLowerCase().trim();
+        const resultsEl = document.getElementById("session-search-results");
+        if (!query) { resultsEl.innerHTML = ""; return; }
+        const windows = rehearsalWindows();
+        const matched = {};
+        windows.forEach(slot => {
+            roles.forEach(role => {
+                const val = slot.parts[role];
+                if (!val || isOpen(val)) return;
+                partList(val).forEach(name => {
+                    if (name.toLowerCase().includes(query)) {
+                        matched[name] ||= new Set();
+                        matched[name].add(slot.practiceSlot);
+                    }
+                });
+            });
+        });
+        if (!Object.keys(matched).length) {
+            resultsEl.innerHTML = `<p class="text-sm text-gray-500 text-center py-4">No one found matching "${query}".</p>`;
+            return;
+        }
+        resultsEl.innerHTML = Object.entries(matched).map(([name, slotSet]) => `
+            <div class="rounded-xl border border-[#263244] bg-[#020617] p-4">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-9 h-9 rounded-xl bg-green-500 text-white flex items-center justify-center text-xs font-black">${initials(name)}</div>
+                    <span class="text-sm font-extrabold text-gray-100">${name}</span>
+                    <span class="ml-auto text-[10px] font-black text-gray-500">${slotSet.size}/${windows.length} slot${slotSet.size !== 1 ? 's' : ''}</span>
+                </div>
+                <div class="space-y-2">
+                    ${windows.map(s => {
+                        const inSlot = slotSet.has(s.practiceSlot);
+                        const myRoles = roles.filter(role => {
+                            const val = s.parts[role];
+                            return val && !isOpen(val) && partList(val).some(n => n === name);
+                        });
+                        return `<div class="flex items-center justify-between rounded-lg dark-soft border ${inSlot ? 'border-green-500/30 bg-green-950/20' : 'border-[#1f2937]'} px-3 py-2">
+                            <div class="min-w-0">
+                                <span class="text-xs font-black ${inSlot ? 'text-gray-200' : 'text-gray-600'}">${timeLabel(s.start)}</span>
+                                <span class="text-xs ${inSlot ? 'text-gray-400' : 'text-gray-700'} ml-2">${s.title}</span>
+                                ${inSlot && myRoles.length ? `<span class="text-[10px] text-green-400 ml-2">${myRoles.join(', ')}</span>` : ''}
+                            </div>
+                            <span class="text-[10px] font-black uppercase tracking-widest ${inSlot ? 'text-green-400' : 'text-gray-700'} ml-3 flex-shrink-0">${inSlot ? 'In' : 'Out'}</span>
+                        </div>`;
+                    }).join('')}
+                </div>
+            </div>
+        `).join("");
+    }
+
     function toggleSong(index) {
         const card = document.querySelector(`[data-song-index="${index}"]`);
         if (!card) return;
@@ -1120,6 +1183,7 @@
     window.addEventListener("hashchange", activatePanelFromHash);
 
     document.getElementById("search-input").addEventListener("input", renderSongs);
+    document.getElementById("session-search").addEventListener("input", renderSessionSearch);
     roleFilter.addEventListener("change", renderSongs);
     document.getElementById("status-filter").addEventListener("change", renderSongs);
 
